@@ -7,7 +7,8 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "watch": "ng build --watch --configuration development"
+    "watch": "ng build --watch --configuration development",
+    "rebuild:ui-kit": "node scripts/rebuild-ui-kit.js"
   },
   "dependencies": {
     "@angular/animations": "^21.0.0",
