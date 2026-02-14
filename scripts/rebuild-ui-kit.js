@@ -20,6 +20,13 @@ fs.mkdirSync(targetDir, { recursive: true });
 // Step 3: Copy fresh build output into node_modules
 copyDirSync(uiKitDist, targetDir);
 
+// Step 4: Clear Angular build cache so the dev server picks up the new files
+const angularCache = path.resolve(__dirname, '..', '.angular');
+if (fs.existsSync(angularCache)) {
+    console.log('Clearing Angular build cache...');
+    fs.rmSync(angularCache, { recursive: true });
+}
+
 console.log('\nDone! ui-kit rebuilt and copied to node_modules.');
 
 function copyDirSync(src, dest) {
