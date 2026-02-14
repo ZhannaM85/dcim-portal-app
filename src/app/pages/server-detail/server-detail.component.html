@@ -1,0 +1,83 @@
+<div class="server-detail" *ngIf="server">
+    <div class="server-detail__top-bar">
+        <kit-button
+            label="Back to Servers"
+            variant="secondary"
+            size="small"
+            (buttonClicked)="goBack()">
+        </kit-button>
+
+        <div class="server-detail__actions">
+            <kit-button
+                label="Restart"
+                variant="primary"
+                size="small"
+                (buttonClicked)="onRestart()">
+            </kit-button>
+
+            <kit-button
+                label="Shut Down"
+                variant="danger"
+                size="small"
+                (buttonClicked)="onShutDown()">
+            </kit-button>
+        </div>
+    </div>
+
+    <div class="server-detail__header">
+        <h1 class="server-detail__hostname">{{ server.hostname }}</h1>
+        <span class="status-badge"
+              [ngClass]="'status-badge--' + server.status">
+            {{ server.status }}
+        </span>
+    </div>
+    <p class="server-detail__id">{{ server.id }}</p>
+
+    <div class="server-detail__cards">
+        <div class="info-card">
+            <h3 class="info-card__title">Network</h3>
+            <div class="info-card__rows">
+                <div class="info-card__row">
+                    <span class="info-card__label">IP Address</span>
+                    <span class="info-card__value mono">{{ server.ipAddress }}</span>
+                </div>
+                <div class="info-card__row">
+                    <span class="info-card__label">Location</span>
+                    <span class="info-card__value">{{ server.location }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <h3 class="info-card__title">System</h3>
+            <div class="info-card__rows">
+                <div class="info-card__row">
+                    <span class="info-card__label">Operating System</span>
+                    <span class="info-card__value">{{ server.os }}</span>
+                </div>
+                <div class="info-card__row">
+                    <span class="info-card__label">Uptime</span>
+                    <span class="info-card__value">{{ formatUptime(server.uptimeHours) }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <h3 class="info-card__title">Hardware</h3>
+            <div class="info-card__rows">
+                <div class="info-card__row">
+                    <span class="info-card__label">CPU Cores</span>
+                    <span class="info-card__value">{{ server.cpuCores }}</span>
+                </div>
+                <div class="info-card__row">
+                    <span class="info-card__label">RAM</span>
+                    <span class="info-card__value">{{ server.ramGb }} GB</span>
+                </div>
+                <div class="info-card__row">
+                    <span class="info-card__label">Storage</span>
+                    <span class="info-card__value">{{ server.storageGb }} GB</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

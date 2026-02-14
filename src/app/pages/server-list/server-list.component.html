@@ -1,0 +1,111 @@
+<div class="server-list">
+    <div class="server-list__header">
+        <h1 class="server-list__title">Servers</h1>
+        <span class="server-list__count">{{ filteredServers.length }} of {{ servers.length }} servers</span>
+    </div>
+
+    <div class="server-list__toolbar">
+        <div class="server-list__filters">
+            <kit-dropdown
+                [options]="statusOptions"
+                placeholder="All Statuses"
+                [selectedValue]="selectedStatus"
+                (selectionChange)="onStatusFilterChange($event)">
+            </kit-dropdown>
+
+            <kit-dropdown
+                [options]="locationOptions"
+                placeholder="All Locations"
+                [selectedValue]="selectedLocation"
+                (selectionChange)="onLocationFilterChange($event)">
+            </kit-dropdown>
+        </div>
+
+        <div class="server-list__actions">
+            <kit-button
+                label="Restart Selected"
+                variant="secondary"
+                size="small"
+                [disabled]="!hasSelection"
+                (buttonClicked)="onRestartSelected()">
+            </kit-button>
+
+            <kit-button
+                label="Delete Selected"
+                variant="danger"
+                size="small"
+                [disabled]="!hasSelection"
+                (buttonClicked)="onDeleteSelected()">
+            </kit-button>
+        </div>
+    </div>
+
+    <div class="server-list__table-wrapper">
+        <table class="server-list__table">
+            <thead>
+                <tr>
+                    <th class="col-select">
+                        <kit-checkbox
+                            [checked]="allSelected"
+                            [indeterminate]="someSelected"
+                            (checkedChange)="toggleSelectAll($event)">
+                        </kit-checkbox>
+                    </th>
+                    <th>Hostname</th>
+                    <th>IP Address</th>
+                    <th>Status</th>
+                    <th>Location</th>
+                    <th>OS</th>
+                    <th>CPU</th>
+                    <th>RAM</th>
+                    <th>Storage</th>
+                    <th>Uptime</th>
+                    <th class="col-action"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let server of filteredServers"
+                    [class.selected]="isSelected(server.id)">
+                    <td class="col-select">
+                        <kit-checkbox
+                            [checked]="isSelected(server.id)"
+                            (checkedChange)="toggleServerSelection(server.id, $event)">
+                        </kit-checkbox>
+                    </td>
+                    <td>
+                        <a class="server-list__hostname"
+                           (click)="navigateToDetail(server.id)">
+                            {{ server.hostname }}
+                        </a>
+                    </td>
+                    <td class="mono">{{ server.ipAddress }}</td>
+                    <td>
+                        <span class="status-badge"
+                              [ngClass]="'status-badge--' + server.status">
+                            {{ server.status }}
+                        </span>
+                    </td>
+                    <td>{{ server.location }}</td>
+                    <td>{{ server.os }}</td>
+                    <td>{{ server.cpuCores }} cores</td>
+                    <td>{{ server.ramGb }} GB</td>
+                    <td>{{ server.storageGb }} GB</td>
+                    <td>{{ formatUptime(server.uptimeHours) }}</td>
+                    <td class="col-action">
+                        <kit-button
+                            label="View"
+                            variant="secondary"
+                            size="small"
+                            (buttonClicked)="navigateToDetail(server.id)">
+                        </kit-button>
+                    </td>
+                </tr>
+                <tr *ngIf="filteredServers.length === 0">
+                    <td colspan="11" class="server-list__empty">
+                        No servers match the current filters.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
