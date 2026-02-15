@@ -35,6 +35,25 @@ jobs:
       - name: Copy index.html to 404.html for SPA routing
         run: cp dist/dcim-portal-app/browser/index.html dist/dcim-portal-app/browser/404.html
 
+      - name: Generate build.txt
+        run: |
+          node -e "
+            const pkg = require('./package.json');
+            const now = new Date().toISOString();
+            const deps = Object.entries(pkg.dependencies || {})
+              .map(([name, version]) => '  ' + name + ': ' + version)
+              .join('\n');
+            const content =
+              'Project: ' + pkg.name + '\n' +
+              'Version: ' + pkg.version + '\n' +
+              'Description: ' + (pkg.description || '') + '\n' +
+              '\n' +
+              'Dependencies:\n' + deps + '\n' +
+              '\n' +
+              'Deployed: ' + now + '\n';
+            require('fs').writeFileSync('dist/dcim-portal-app/browser/build.txt', content);
+          "
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
