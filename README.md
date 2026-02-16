@@ -4,6 +4,8 @@ A **Data Center Infrastructure Management** portal built with Angular 21.
 
 This application provides a web-based interface for monitoring and managing data center infrastructure.
 
+**Live demo:** [https://zhannam85.github.io/dcim-portal-app](https://zhannam85.github.io/dcim-portal-app)
+
 ## Prerequisites
 
 - [Node.js](https://nodejs.org/) (LTS recommended)
