@@ -1,0 +1,115 @@
+<div class="add-server-dialog">
+    <div class="add-server-dialog__header">
+        <h2 class="add-server-dialog__title">Add New Server</h2>
+    </div>
+
+    <form [formGroup]="serverForm" (ngSubmit)="onSubmit()" class="add-server-dialog__form">
+        <div class="add-server-dialog__form-row">
+            <kit-input
+                label="Hostname"
+                formControlName="hostname"
+                placeholder="e.g., web-prod-01"
+                [required]="true"
+                [error]="hostname?.touched && hostname?.invalid ? getErrorMessage('hostname') : ''">
+            </kit-input>
+        </div>
+
+        <div class="add-server-dialog__form-row">
+            <kit-input
+                label="IP Address"
+                formControlName="ipAddress"
+                type="text"
+                placeholder="e.g., 10.0.1.10"
+                [required]="true"
+                [error]="ipAddress?.touched && ipAddress?.invalid ? getErrorMessage('ipAddress') : ''">
+            </kit-input>
+        </div>
+
+        <div class="add-server-dialog__form-row">
+            <label class="form-label">
+                Location <span class="form-label__required">*</span>
+            </label>
+            <kit-dropdown
+                [options]="locationOptions"
+                placeholder="Select Location"
+                [selectedValue]="location?.value"
+                (selectionChange)="location?.setValue($event)">
+            </kit-dropdown>
+            <span *ngIf="location?.touched && location?.invalid" class="form-error">
+                {{ getErrorMessage('location') }}
+            </span>
+        </div>
+
+        <div class="add-server-dialog__form-row">
+            <kit-input
+                label="Operating System"
+                formControlName="os"
+                placeholder="e.g., Ubuntu 22.04 LTS"
+                [required]="true"
+                [error]="os?.touched && os?.invalid ? getErrorMessage('os') : ''">
+            </kit-input>
+        </div>
+
+        <div class="add-server-dialog__form-row">
+            <label class="form-label">
+                Status <span class="form-label__required">*</span>
+            </label>
+            <kit-dropdown
+                [options]="statusOptions"
+                placeholder="Select Status"
+                [selectedValue]="status?.value"
+                (selectionChange)="status?.setValue($event)">
+            </kit-dropdown>
+        </div>
+
+        <div class="add-server-dialog__form-row add-server-dialog__form-row--inline">
+            <div class="add-server-dialog__form-col">
+                <kit-input
+                    label="CPU Cores"
+                    formControlName="cpuCores"
+                    type="number"
+                    placeholder="4"
+                    [required]="true"
+                    [error]="cpuCores?.touched && cpuCores?.invalid ? getErrorMessage('cpuCores') : ''">
+                </kit-input>
+            </div>
+
+            <div class="add-server-dialog__form-col">
+                <kit-input
+                    label="RAM (GB)"
+                    formControlName="ramGb"
+                    type="number"
+                    placeholder="8"
+                    [required]="true"
+                    [error]="ramGb?.touched && ramGb?.invalid ? getErrorMessage('ramGb') : ''">
+                </kit-input>
+            </div>
+
+            <div class="add-server-dialog__form-col">
+                <kit-input
+                    label="Storage (GB)"
+                    formControlName="storageGb"
+                    type="number"
+                    placeholder="100"
+                    [required]="true"
+                    [error]="storageGb?.touched && storageGb?.invalid ? getErrorMessage('storageGb') : ''">
+                </kit-input>
+            </div>
+        </div>
+
+        <div class="add-server-dialog__actions">
+            <kit-button
+                label="Cancel"
+                variant="secondary"
+                type="button"
+                (buttonClicked)="onCancel()">
+            </kit-button>
+            <kit-button
+                label="Add Server"
+                variant="primary"
+                type="submit"
+                [disabled]="serverForm.invalid">
+            </kit-button>
+        </div>
+    </form>
+</div>

@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Dialog } from '@angular/cdk/dialog';
 import { DropdownOption } from '@zhannam85/ui-kit';
 import { Server } from '../../models/server.model';
 import { ServerService } from '../../services/server.service';
+import { AddServerDialogComponent } from './add-server-dialog/add-server-dialog.component';
 
 @Component({
     standalone: false,
@@ -34,7 +36,8 @@ export class ServerListComponent implements OnInit {
 
     constructor(
         private serverService: ServerService,
-        private router: Router
+        private router: Router,
+        private dialog: Dialog
     ) {}
 
     ngOnInit(): void {
@@ -139,5 +142,19 @@ export class ServerListComponent implements OnInit {
         if (hours < 24) return `${hours}h`;
         const days = Math.floor(hours / 24);
         return `${days}d ${hours % 24}h`;
+    }
+
+    onAddServer(): void {
+        const dialogRef = this.dialog.open<Server>(AddServerDialogComponent, {
+            width: '600px',
+            maxWidth: '90vw',
+        });
+
+        dialogRef.closed.subscribe((result) => {
+            if (result) {
+                // Server was created, refresh the list
+                this.loadServers();
+            }
+        });
     }
 }
