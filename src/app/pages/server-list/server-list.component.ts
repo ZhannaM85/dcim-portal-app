@@ -148,6 +148,10 @@ export class ServerListComponent implements OnInit {
         const dialogRef = this.dialog.open<Server>(AddServerDialogComponent, {
             width: '600px',
             maxWidth: '90vw',
+            maxHeight: '90vh',
+            hasBackdrop: true,
+            backdropClass: 'cdk-dialog-backdrop',
+            panelClass: 'add-server-dialog-panel',
         });
 
         dialogRef.closed.subscribe((result) => {
