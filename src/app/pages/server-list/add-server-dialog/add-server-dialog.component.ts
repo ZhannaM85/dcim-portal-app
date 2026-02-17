@@ -12,15 +12,15 @@ import { Server, ServerLocation, ServerStatus } from '../../../models/server.mod
     styleUrls: ['./add-server-dialog.component.scss'],
 })
 export class AddServerDialogComponent {
-    serverForm: FormGroup;
+    public serverForm: FormGroup;
 
-    locationOptions: DropdownOption[] = [
+    public locationOptions: DropdownOption[] = [
         { label: 'DC-East', value: 'DC-East' },
         { label: 'DC-West', value: 'DC-West' },
         { label: 'DC-Europe', value: 'DC-Europe' },
     ];
 
-    statusOptions: DropdownOption[] = [
+    public statusOptions: DropdownOption[] = [
         { label: 'Running', value: 'running' },
         { label: 'Stopped', value: 'stopped' },
         { label: 'Maintenance', value: 'maintenance' },
@@ -46,35 +46,35 @@ export class AddServerDialogComponent {
         });
     }
 
-    get hostname() {
+    public get hostname() {
         return this.serverForm.get('hostname');
     }
 
-    get ipAddress() {
+    public get ipAddress() {
         return this.serverForm.get('ipAddress');
     }
 
-    get location() {
+    public get location() {
         return this.serverForm.get('location');
     }
 
-    get os() {
+    public get os() {
         return this.serverForm.get('os');
     }
 
-    get status() {
+    public get status() {
         return this.serverForm.get('status');
     }
 
-    get cpuCores() {
+    public get cpuCores() {
         return this.serverForm.get('cpuCores');
     }
 
-    get ramGb() {
+    public get ramGb() {
         return this.serverForm.get('ramGb');
     }
 
-    get storageGb() {
+    public get storageGb() {
         return this.serverForm.get('storageGb');
     }
 
@@ -101,11 +101,11 @@ export class AddServerDialogComponent {
         }
     }
 
-    onCancel(): void {
+    public onCancel(): void {
         this.dialogRef.close();
     }
 
-    getErrorMessage(fieldName: string): string {
+    public getErrorMessage(fieldName: string): string {
         const control = this.serverForm.get(fieldName);
         if (control?.hasError('required')) {
             return `${fieldName} is required`;

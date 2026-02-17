@@ -1,5 +1,4 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
-import { HighchartsChartModule } from 'highcharts-angular';
 import * as Highcharts from 'highcharts';
 
 @Component({
@@ -9,19 +8,19 @@ import * as Highcharts from 'highcharts';
     styleUrls: ['./server-detail-chart.component.scss'],
 })
 export class ServerDetailChartComponent implements OnInit, OnChanges {
-    @Input() serverId: string | undefined;
+    @Input() public qserverId: string | undefined;
 
-    @Input() uptimeHours = 0;
+    @Input() public uptimeHours = 0;
 
-    Highcharts: typeof Highcharts = Highcharts;
+    public Highcharts: typeof Highcharts = Highcharts;
 
-    chartOptions: Highcharts.Options = {};
+    public chartOptions: Highcharts.Options = {};
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.generateChartData();
     }
 
-    ngOnChanges(changes: SimpleChanges): void {
+    public ngOnChanges(changes: SimpleChanges): void {
         if (changes['serverId'] || changes['uptimeHours']) {
             this.generateChartData();
         }

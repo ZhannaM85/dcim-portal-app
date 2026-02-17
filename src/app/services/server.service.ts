@@ -7,19 +7,19 @@ import { Server, MOCK_SERVERS } from '../models/server.model';
 export class ServerService {
     private servers: Server[] = [...MOCK_SERVERS];
 
-    getAll(): Server[] {
+    public getAll(): Server[] {
         return [...this.servers];
     }
 
-    getById(id: string): Server | undefined {
+    public getById(id: string): Server | undefined {
         return this.servers.find((s) => s.id === id);
     }
 
-    deleteByIds(ids: string[]): void {
+    public deleteByIds(ids: string[]): void {
         this.servers = this.servers.filter((s) => !ids.includes(s.id));
     }
 
-    create(serverData: Partial<Server>): Server {
+    public create(serverData: Partial<Server>): Server {
         // Generate unique ID
         const maxId = this.servers.reduce((max, s) => {
             const num = parseInt(s.id.replace('srv-', ''), 10);
@@ -44,7 +44,7 @@ export class ServerService {
         return newServer;
     }
 
-    update(id: string, updates: Partial<Server>): Server | undefined {
+    public update(id: string, updates: Partial<Server>): Server | undefined {
         const server = this.servers.find((s) => s.id === id);
         if (!server) {
             return undefined;

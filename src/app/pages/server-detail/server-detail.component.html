@@ -138,10 +138,10 @@
                     [error]="serverForm.get('ipAddress')?.touched && serverForm.get('ipAddress')?.invalid ? getErrorMessage('ipAddress') : ''">
                 </kit-input>
 
-                <div class="server-detail__edit-field">
-                    <label class="form-label">
+                <div class="server-detail__edit-field" role="group" aria-labelledby="location-label">
+                    <span id="location-label" class="form-label">
                         Location <span class="form-label__required">*</span>
-                    </label>
+                    </span>
                     <kit-dropdown
                         [options]="locationOptions"
                         placeholder="Select Location"

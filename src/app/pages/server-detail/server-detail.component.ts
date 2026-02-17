@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Server, ServerLocation, ServerStatus } from '../../models/server.model';
+import { Server, ServerLocation } from '../../models/server.model';
 import { ServerService } from '../../services/server.service';
 import { DropdownOption } from '@zhannam85/ui-kit';
 
@@ -12,13 +12,13 @@ import { DropdownOption } from '@zhannam85/ui-kit';
     styleUrls: ['./server-detail.component.scss'],
 })
 export class ServerDetailComponent implements OnInit {
-    server: Server | undefined;
+    public server: Server | undefined;
 
-    isEditMode = false;
+    public isEditMode = false;
 
-    serverForm: FormGroup;
+    public serverForm: FormGroup;
 
-    locationOptions: DropdownOption[] = [
+    public locationOptions: DropdownOption[] = [
         { label: 'DC-East', value: 'DC-East' },
         { label: 'DC-West', value: 'DC-West' },
         { label: 'DC-Europe', value: 'DC-Europe' },
@@ -44,7 +44,7 @@ export class ServerDetailComponent implements OnInit {
         });
     }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         const id = this.route.snapshot.paramMap.get('id');
         if (id) {
             this.server = this.serverService.getById(id);
@@ -71,39 +71,39 @@ export class ServerDetailComponent implements OnInit {
         }
     }
 
-    goBack(): void {
+    public goBack(): void {
         this.router.navigate(['/servers']);
     }
 
-    onRestart(): void {
+    public onRestart(): void {
         if (this.server) {
             this.server.status = 'running';
             this.server.uptimeHours = 0;
         }
     }
 
-    onShutDown(): void {
+    public onShutDown(): void {
         if (this.server) {
             this.server.status = 'stopped';
             this.server.uptimeHours = 0;
         }
     }
 
-    formatUptime(hours: number): string {
+    public formatUptime(hours: number): string {
         if (hours === 0) return 'Offline';
         if (hours < 24) return `${hours}h`;
         const days = Math.floor(hours / 24);
         return `${days}d ${hours % 24}h`;
     }
 
-    toggleEditMode(): void {
+    public toggleEditMode(): void {
         this.isEditMode = !this.isEditMode;
         if (this.isEditMode) {
             this.initializeForm();
         }
     }
 
-    saveChanges(): void {
+    public saveChanges(): void {
         if (this.serverForm.valid && this.server) {
             const formValue = this.serverForm.value;
             this.serverService.update(this.server.id, {
@@ -126,12 +126,12 @@ export class ServerDetailComponent implements OnInit {
         }
     }
 
-    cancelEdit(): void {
+    public cancelEdit(): void {
         this.isEditMode = false;
         this.initializeForm();
     }
 
-    getErrorMessage(fieldName: string): string {
+    public getErrorMessage(fieldName: string): string {
         const control = this.serverForm.get(fieldName);
         if (control?.hasError('required')) {
             return `${fieldName} is required`;

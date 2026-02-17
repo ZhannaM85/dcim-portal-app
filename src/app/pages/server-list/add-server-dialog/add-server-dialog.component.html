@@ -33,10 +33,10 @@
                 </kit-input>
             </div>
 
-            <div class="add-server-dialog__form-row">
-                <label class="form-label">
+            <div class="add-server-dialog__form-row" role="group" aria-labelledby="location-label">
+                <span id="location-label" class="form-label">
                     Location <span class="form-label__required">*</span>
-                </label>
+                </span>
                 <kit-dropdown
                     [options]="locationOptions"
                     placeholder="Select Location"
@@ -58,10 +58,10 @@
                 </kit-input>
             </div>
 
-            <div class="add-server-dialog__form-row">
-                <label class="form-label">
+            <div class="add-server-dialog__form-row" role="group" aria-labelledby="status-label">
+                <span id="status-label" class="form-label">
                     Status <span class="form-label__required">*</span>
-                </label>
+                </span>
                 <kit-dropdown
                     [options]="statusOptions"
                     placeholder="Select Status"

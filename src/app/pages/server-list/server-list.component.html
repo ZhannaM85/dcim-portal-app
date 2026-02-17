@@ -81,7 +81,7 @@
                     </td>
                     <td>
                         <a class="server-list__hostname"
-                           (click)="navigateToDetail(server.id)">
+                           [routerLink]="['/servers', server.id]">
                             {{ server.hostname }}
                         </a>
                     </td>
