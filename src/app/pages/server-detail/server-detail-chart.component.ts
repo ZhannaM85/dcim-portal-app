@@ -8,7 +8,7 @@ import * as Highcharts from 'highcharts';
     styleUrls: ['./server-detail-chart.component.scss'],
 })
 export class ServerDetailChartComponent implements OnInit, OnChanges {
-    @Input() public qserverId: string | undefined;
+    @Input() public serverId: string | undefined;
 
     @Input() public uptimeHours = 0;
 
