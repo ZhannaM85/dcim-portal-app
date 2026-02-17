@@ -8,6 +8,9 @@
     max-height: 100%;
 
     &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         margin-bottom: 24px;
         flex-shrink: 0;
     }
@@ -17,6 +20,29 @@
         font-weight: 600;
         color: var(--color-text, #333);
         margin: 0;
+    }
+
+    &__close {
+        background: none;
+        border: none;
+        padding: 4px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-text-secondary, #64748b);
+        transition: color 0.2s ease;
+        border-radius: 4px;
+
+        &:hover {
+            color: var(--color-text, #1e293b);
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--color-primary, #4a90e2);
+            outline-offset: 2px;
+        }
     }
 
     &__form-wrapper {

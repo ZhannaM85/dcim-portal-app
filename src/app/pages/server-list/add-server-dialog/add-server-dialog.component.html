@@ -1,6 +1,13 @@
 <div class="add-server-dialog">
     <div class="add-server-dialog__header">
         <h2 class="add-server-dialog__title">Add New Server</h2>
+        <button
+            type="button"
+            class="add-server-dialog__close"
+            (click)="onCancel()"
+            aria-label="Close dialog">
+            <kit-icon-close [size]="20"></kit-icon-close>
+        </button>
     </div>
 
     <form [formGroup]="serverForm" (ngSubmit)="onSubmit()" class="add-server-dialog__form-wrapper">
