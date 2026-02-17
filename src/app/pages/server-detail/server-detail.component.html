@@ -112,8 +112,8 @@
     <!-- CPU Usage Chart -->
     <app-server-detail-chart
         *ngIf="!isEditMode"
-        [serverId]="server?.id"
-        [uptimeHours]="server?.uptimeHours || 0">
+        [serverId]="server.id"
+        [uptimeHours]="server.uptimeHours || 0">
     </app-server-detail-chart>
 
     <!-- Edit Mode -->

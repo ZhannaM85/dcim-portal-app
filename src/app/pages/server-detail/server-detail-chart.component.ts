@@ -14,7 +14,6 @@ export class ServerDetailChartComponent implements OnInit, OnChanges {
 
     Highcharts: typeof Highcharts = Highcharts;
     chartOptions: Highcharts.Options = {};
-    updateFlag = false;
 
     ngOnInit(): void {
         this.generateChartData();
@@ -23,7 +22,6 @@ export class ServerDetailChartComponent implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['serverId'] || changes['uptimeHours']) {
             this.generateChartData();
-            this.updateFlag = true;
         }
     }
 
