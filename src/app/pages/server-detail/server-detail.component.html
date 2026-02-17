@@ -9,17 +9,44 @@
 
         <div class="server-detail__actions">
             <kit-button
-                label="Restart"
+                *ngIf="!isEditMode"
+                label="Edit"
                 variant="primary"
+                size="small"
+                (buttonClicked)="toggleEditMode()">
+            </kit-button>
+
+            <kit-button
+                *ngIf="!isEditMode"
+                label="Restart"
+                variant="secondary"
                 size="small"
                 (buttonClicked)="onRestart()">
             </kit-button>
 
             <kit-button
+                *ngIf="!isEditMode"
                 label="Shut Down"
                 variant="danger"
                 size="small"
                 (buttonClicked)="onShutDown()">
+            </kit-button>
+
+            <kit-button
+                *ngIf="isEditMode"
+                label="Cancel"
+                variant="secondary"
+                size="small"
+                (buttonClicked)="cancelEdit()">
+            </kit-button>
+
+            <kit-button
+                *ngIf="isEditMode"
+                label="Save"
+                variant="primary"
+                size="small"
+                (buttonClicked)="saveChanges()"
+                [disabled]="serverForm.invalid">
             </kit-button>
         </div>
     </div>
@@ -33,7 +60,8 @@
     </div>
     <p class="server-detail__id">{{ server.id }}</p>
 
-    <div class="server-detail__cards">
+    <!-- View Mode -->
+    <div class="server-detail__cards" *ngIf="!isEditMode">
         <div class="info-card">
             <h3 class="info-card__title">Network</h3>
             <div class="info-card__rows">
@@ -80,4 +108,96 @@
             </div>
         </div>
     </div>
+
+    <!-- CPU Usage Chart -->
+    <app-server-detail-chart
+        *ngIf="!isEditMode"
+        [serverId]="server.id"
+        [uptimeHours]="server.uptimeHours || 0">
+    </app-server-detail-chart>
+
+    <!-- Edit Mode -->
+    <form [formGroup]="serverForm" *ngIf="isEditMode" class="server-detail__edit-form">
+        <div class="server-detail__edit-section">
+            <h3 class="server-detail__edit-title">Network</h3>
+            <div class="server-detail__edit-fields">
+                <kit-input
+                    label="Hostname"
+                    formControlName="hostname"
+                    placeholder="e.g., web-prod-01"
+                    [required]="true"
+                    [error]="serverForm.get('hostname')?.touched && serverForm.get('hostname')?.invalid ? getErrorMessage('hostname') : ''">
+                </kit-input>
+
+                <kit-input
+                    label="IP Address"
+                    formControlName="ipAddress"
+                    type="text"
+                    placeholder="e.g., 10.0.1.10"
+                    [required]="true"
+                    [error]="serverForm.get('ipAddress')?.touched && serverForm.get('ipAddress')?.invalid ? getErrorMessage('ipAddress') : ''">
+                </kit-input>
+
+                <div class="server-detail__edit-field" role="group" aria-labelledby="location-label">
+                    <span id="location-label" class="form-label">
+                        Location <span class="form-label__required">*</span>
+                    </span>
+                    <kit-dropdown
+                        [options]="locationOptions"
+                        placeholder="Select Location"
+                        [selectedValue]="serverForm.get('location')?.value"
+                        (selectionChange)="serverForm.get('location')?.setValue($event)">
+                    </kit-dropdown>
+                    <span *ngIf="serverForm.get('location')?.touched && serverForm.get('location')?.invalid" class="form-error">
+                        {{ getErrorMessage('location') }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="server-detail__edit-section">
+            <h3 class="server-detail__edit-title">System</h3>
+            <div class="server-detail__edit-fields">
+                <kit-input
+                    label="Operating System"
+                    formControlName="os"
+                    placeholder="e.g., Ubuntu 22.04 LTS"
+                    [required]="true"
+                    [error]="serverForm.get('os')?.touched && serverForm.get('os')?.invalid ? getErrorMessage('os') : ''">
+                </kit-input>
+            </div>
+        </div>
+
+        <div class="server-detail__edit-section">
+            <h3 class="server-detail__edit-title">Hardware</h3>
+            <div class="server-detail__edit-fields server-detail__edit-fields--inline">
+                <kit-input
+                    label="CPU Cores"
+                    formControlName="cpuCores"
+                    type="number"
+                    placeholder="4"
+                    [required]="true"
+                    [error]="serverForm.get('cpuCores')?.touched && serverForm.get('cpuCores')?.invalid ? getErrorMessage('cpuCores') : ''">
+                </kit-input>
+
+                <kit-input
+                    label="RAM (GB)"
+                    formControlName="ramGb"
+                    type="number"
+                    placeholder="8"
+                    [required]="true"
+                    [error]="serverForm.get('ramGb')?.touched && serverForm.get('ramGb')?.invalid ? getErrorMessage('ramGb') : ''">
+                </kit-input>
+
+                <kit-input
+                    label="Storage (GB)"
+                    formControlName="storageGb"
+                    type="number"
+                    placeholder="100"
+                    [required]="true"
+                    [error]="serverForm.get('storageGb')?.touched && serverForm.get('storageGb')?.invalid ? getErrorMessage('storageGb') : ''">
+                </kit-input>
+            </div>
+        </div>
+    </form>
 </div>

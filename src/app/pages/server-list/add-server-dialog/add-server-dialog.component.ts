@@ -1,21 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Server, ServerLocation } from '../../models/server.model';
-import { ServerService } from '../../services/server.service';
+import { DialogRef } from '@angular/cdk/dialog';
 import { DropdownOption } from '@zhannam85/ui-kit';
+import { ServerService } from '../../../services/server.service';
+import { Server, ServerLocation, ServerStatus } from '../../../models/server.model';
 
 @Component({
+    selector: 'app-add-server-dialog',
     standalone: false,
-    selector: 'app-server-detail',
-    templateUrl: './server-detail.component.html',
-    styleUrls: ['./server-detail.component.scss'],
+    templateUrl: './add-server-dialog.component.html',
+    styleUrls: ['./add-server-dialog.component.scss'],
 })
-export class ServerDetailComponent implements OnInit {
-    public server: Server | undefined;
-
-    public isEditMode = false;
-
+export class AddServerDialogComponent {
     public serverForm: FormGroup;
 
     public locationOptions: DropdownOption[] = [
@@ -24,100 +20,79 @@ export class ServerDetailComponent implements OnInit {
         { label: 'DC-Europe', value: 'DC-Europe' },
     ];
 
+    public statusOptions: DropdownOption[] = [
+        { label: 'Running', value: 'running' },
+        { label: 'Stopped', value: 'stopped' },
+        { label: 'Maintenance', value: 'maintenance' },
+    ];
+
     // IP address validation regex
     private ipRegex = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
 
     constructor(
-        private route: ActivatedRoute,
-        private router: Router,
-        private serverService: ServerService,
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        private dialogRef: DialogRef<Server>,
+        private serverService: ServerService
     ) {
         this.serverForm = this.fb.group({
             hostname: ['', [Validators.required, Validators.minLength(3)]],
             ipAddress: ['', [Validators.required, Validators.pattern(this.ipRegex)]],
             location: ['DC-East', Validators.required],
             os: ['', Validators.required],
+            status: ['stopped', Validators.required],
             cpuCores: [4, [Validators.required, Validators.min(1), Validators.max(256)]],
             ramGb: [8, [Validators.required, Validators.min(1), Validators.max(1024)]],
             storageGb: [100, [Validators.required, Validators.min(1), Validators.max(100000)]],
         });
     }
 
-    public ngOnInit(): void {
-        const id = this.route.snapshot.paramMap.get('id');
-        if (id) {
-            this.server = this.serverService.getById(id);
-            if (this.server) {
-                this.initializeForm();
-            }
-        }
-        if (!this.server) {
-            this.router.navigate(['/servers']);
-        }
+    public get hostname() {
+        return this.serverForm.get('hostname');
     }
 
-    private initializeForm(): void {
-        if (this.server) {
-            this.serverForm.patchValue({
-                hostname: this.server.hostname,
-                ipAddress: this.server.ipAddress,
-                location: this.server.location,
-                os: this.server.os,
-                cpuCores: this.server.cpuCores,
-                ramGb: this.server.ramGb,
-                storageGb: this.server.storageGb,
-            });
-        }
+    public get ipAddress() {
+        return this.serverForm.get('ipAddress');
     }
 
-    public goBack(): void {
-        this.router.navigate(['/servers']);
+    public get location() {
+        return this.serverForm.get('location');
     }
 
-    public onRestart(): void {
-        if (this.server) {
-            this.server.status = 'running';
-            this.server.uptimeHours = 0;
-        }
+    public get os() {
+        return this.serverForm.get('os');
     }
 
-    public onShutDown(): void {
-        if (this.server) {
-            this.server.status = 'stopped';
-            this.server.uptimeHours = 0;
-        }
+    public get status() {
+        return this.serverForm.get('status');
     }
 
-    public formatUptime(hours: number): string {
-        if (hours === 0) return 'Offline';
-        if (hours < 24) return `${hours}h`;
-        const days = Math.floor(hours / 24);
-        return `${days}d ${hours % 24}h`;
+    public get cpuCores() {
+        return this.serverForm.get('cpuCores');
     }
 
-    public toggleEditMode(): void {
-        this.isEditMode = !this.isEditMode;
-        if (this.isEditMode) {
-            this.initializeForm();
-        }
+    public get ramGb() {
+        return this.serverForm.get('ramGb');
     }
 
-    public saveChanges(): void {
-        if (this.serverForm.valid && this.server) {
+    public get storageGb() {
+        return this.serverForm.get('storageGb');
+    }
+
+    public onSubmit(): void {
+        if (this.serverForm.valid) {
             const formValue = this.serverForm.value;
-            this.serverService.update(this.server.id, {
+            const newServer = this.serverService.create({
                 hostname: formValue.hostname,
                 ipAddress: formValue.ipAddress,
                 location: formValue.location as ServerLocation,
                 os: formValue.os,
+                status: formValue.status as ServerStatus,
                 cpuCores: parseInt(formValue.cpuCores, 10),
                 ramGb: parseInt(formValue.ramGb, 10),
                 storageGb: parseInt(formValue.storageGb, 10),
+                uptimeHours: 0,
             });
-            // Reload server to get updated data
-            this.server = this.serverService.getById(this.server.id);
-            this.isEditMode = false;
+            this.dialogRef.close(newServer);
         } else {
             // Mark all fields as touched to show validation errors
             Object.keys(this.serverForm.controls).forEach((key) => {
@@ -126,9 +101,8 @@ export class ServerDetailComponent implements OnInit {
         }
     }
 
-    public cancelEdit(): void {
-        this.isEditMode = false;
-        this.initializeForm();
+    public onCancel(): void {
+        this.dialogRef.close();
     }
 
     public getErrorMessage(fieldName: string): string {
