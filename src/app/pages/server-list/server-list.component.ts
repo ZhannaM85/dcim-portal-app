@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Dialog } from '@angular/cdk/dialog';
 import { DropdownOption } from '@zhannam85/ui-kit';
@@ -11,6 +11,7 @@ import { AddServerDialogComponent } from './add-server-dialog/add-server-dialog.
     selector: 'app-server-list',
     templateUrl: './server-list.component.html',
     styleUrls: ['./server-list.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ServerListComponent implements OnInit {
     public servers: Server[] = [];
@@ -40,7 +41,8 @@ export class ServerListComponent implements OnInit {
     constructor(
         private serverService: ServerService,
         private router: Router,
-        private dialog: Dialog
+        private dialog: Dialog,
+        private cdr: ChangeDetectorRef
     ) {}
 
     public ngOnInit(): void {
@@ -161,6 +163,7 @@ export class ServerListComponent implements OnInit {
             if (result) {
                 // Server was created, refresh the list
                 this.loadServers();
+                this.cdr.detectChanges();
             }
         });
     }
