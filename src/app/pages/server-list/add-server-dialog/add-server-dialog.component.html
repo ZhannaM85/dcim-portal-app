@@ -117,7 +117,8 @@
                 label="Add Server"
                 variant="primary"
                 type="submit"
-                [disabled]="serverForm.invalid">
+                [disabled]="serverForm.invalid"
+                (buttonClicked)="onSubmit()">
             </kit-button>
         </div>
     </form>
