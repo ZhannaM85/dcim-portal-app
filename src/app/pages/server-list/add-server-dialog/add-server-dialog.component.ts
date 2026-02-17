@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DialogRef } from '@angular/cdk/dialog';
-import { InputModule, DropdownModule, ButtonModule, DropdownOption } from '@zhannam85/ui-kit';
+import { DropdownOption } from '@zhannam85/ui-kit';
 import { ServerService } from '../../../services/server.service';
 import { Server, ServerLocation, ServerStatus } from '../../../models/server.model';
 
@@ -76,7 +76,7 @@ export class AddServerDialogComponent {
         return this.serverForm.get('storageGb');
     }
 
-    onSubmit(): void {
+    public onSubmit(): void {
         if (this.serverForm.valid) {
             const formValue = this.serverForm.value;
             const newServer = this.serverService.create({
