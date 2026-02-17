@@ -14,8 +14,10 @@ import { AddServerDialogComponent } from './add-server-dialog/add-server-dialog.
 })
 export class ServerListComponent implements OnInit {
     servers: Server[] = [];
+
     filteredServers: Server[] = [];
-    selectedIds: Set<string> = new Set();
+
+    selectedIds = new Set<string>();
 
     statusOptions: DropdownOption[] = [
         { label: 'All Statuses', value: '' },
@@ -32,6 +34,7 @@ export class ServerListComponent implements OnInit {
     ];
 
     selectedStatus = '';
+
     selectedLocation = '';
 
     constructor(

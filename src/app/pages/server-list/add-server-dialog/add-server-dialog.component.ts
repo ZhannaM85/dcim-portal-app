@@ -13,11 +13,13 @@ import { Server, ServerLocation, ServerStatus } from '../../../models/server.mod
 })
 export class AddServerDialogComponent {
     serverForm: FormGroup;
+
     locationOptions: DropdownOption[] = [
         { label: 'DC-East', value: 'DC-East' },
         { label: 'DC-West', value: 'DC-West' },
         { label: 'DC-Europe', value: 'DC-Europe' },
     ];
+
     statusOptions: DropdownOption[] = [
         { label: 'Running', value: 'running' },
         { label: 'Stopped', value: 'stopped' },

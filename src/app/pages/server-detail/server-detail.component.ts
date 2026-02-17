@@ -13,8 +13,11 @@ import { DropdownOption } from '@zhannam85/ui-kit';
 })
 export class ServerDetailComponent implements OnInit {
     server: Server | undefined;
+
     isEditMode = false;
+
     serverForm: FormGroup;
+
     locationOptions: DropdownOption[] = [
         { label: 'DC-East', value: 'DC-East' },
         { label: 'DC-West', value: 'DC-West' },

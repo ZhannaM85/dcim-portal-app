@@ -10,9 +10,11 @@ import * as Highcharts from 'highcharts';
 })
 export class ServerDetailChartComponent implements OnInit, OnChanges {
     @Input() serverId: string | undefined;
-    @Input() uptimeHours: number = 0;
+
+    @Input() uptimeHours = 0;
 
     Highcharts: typeof Highcharts = Highcharts;
+
     chartOptions: Highcharts.Options = {};
 
     ngOnInit(): void {
@@ -30,7 +32,7 @@ export class ServerDetailChartComponent implements OnInit, OnChanges {
         const dataPoints: [number, number][] = [];
         const now = Date.now();
         const hoursToShow = Math.min(24, Math.max(1, Math.floor(this.uptimeHours)));
-        
+
         // Generate hourly data points
         for (let i = hoursToShow; i >= 0; i--) {
             const timestamp = now - (i * 60 * 60 * 1000);
