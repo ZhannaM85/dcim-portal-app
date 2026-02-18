@@ -6,6 +6,11 @@ import { Server } from '../../models/server.model';
 import { ServerService } from '../../services/server.service';
 import { AddServerDialogComponent } from './add-server-dialog/add-server-dialog.component';
 
+type SortColumn = 'hostname' | 'ipAddress' | 'status' | 'location' | 'os' | 'cpuCores' | 'ramGb' | 'storageGb' | 'uptimeHours';
+type SortDirection = 'asc' | 'desc';
+
+const NUMERIC_COLUMNS: ReadonlySet<SortColumn> = new Set(['cpuCores', 'ramGb', 'storageGb', 'uptimeHours']);
+
 @Component({
     standalone: false,
     selector: 'app-server-list',
@@ -19,6 +24,10 @@ export class ServerListComponent implements OnInit {
     public filteredServers: Server[] = [];
 
     public selectedIds = new Set<string>();
+
+    public sortColumn: SortColumn | null = 'hostname';
+
+    public sortDirection: SortDirection = 'asc';
 
     public statusOptions: DropdownOption[] = [
         { label: 'All Statuses', value: '' },
@@ -62,13 +71,43 @@ export class ServerListComponent implements OnInit {
                 !this.selectedLocation || s.location === this.selectedLocation;
             return matchesStatus && matchesLocation;
         });
-        // Remove selections that are no longer visible
+
+        if (this.sortColumn) {
+            const col = this.sortColumn;
+            const dir = this.sortDirection === 'asc' ? 1 : -1;
+
+            this.filteredServers.sort((a, b) => {
+                const valA = a[col];
+                const valB = b[col];
+
+                if (NUMERIC_COLUMNS.has(col)) {
+                    return ((valA as number) - (valB as number)) * dir;
+                }
+                return String(valA).localeCompare(String(valB)) * dir;
+            });
+        }
+
         const visibleIds = new Set(this.filteredServers.map((s) => s.id));
         this.selectedIds.forEach((id) => {
             if (!visibleIds.has(id)) {
                 this.selectedIds.delete(id);
             }
         });
+    }
+
+    public sort(column: SortColumn): void {
+        if (this.sortColumn === column) {
+            if (this.sortDirection === 'asc') {
+                this.sortDirection = 'desc';
+            } else {
+                this.sortColumn = null;
+                this.sortDirection = 'asc';
+            }
+        } else {
+            this.sortColumn = column;
+            this.sortDirection = 'asc';
+        }
+        this.applyFilters();
     }
 
     public onStatusFilterChange(value: string): void {
