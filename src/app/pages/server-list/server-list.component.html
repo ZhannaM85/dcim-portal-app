@@ -58,15 +58,51 @@
                             (checkedChange)="toggleSelectAll($event)">
                         </kit-checkbox>
                     </th>
-                    <th>Hostname</th>
-                    <th>IP Address</th>
-                    <th>Status</th>
-                    <th>Location</th>
-                    <th>OS</th>
-                    <th>CPU</th>
-                    <th>RAM</th>
-                    <th>Storage</th>
-                    <th>Uptime</th>
+                    <th class="sortable" (click)="sort('hostname')">
+                        Hostname
+                        <kit-icon-sort-asc *ngIf="sortColumn === 'hostname' && sortDirection === 'asc'"></kit-icon-sort-asc>
+                        <kit-icon-sort-desc *ngIf="sortColumn === 'hostname' && sortDirection === 'desc'"></kit-icon-sort-desc>
+                    </th>
+                    <th class="sortable" (click)="sort('ipAddress')">
+                        IP Address
+                        <kit-icon-sort-asc *ngIf="sortColumn === 'ipAddress' && sortDirection === 'asc'"></kit-icon-sort-asc>
+                        <kit-icon-sort-desc *ngIf="sortColumn === 'ipAddress' && sortDirection === 'desc'"></kit-icon-sort-desc>
+                    </th>
+                    <th class="sortable" (click)="sort('status')">
+                        Status
+                        <kit-icon-sort-asc *ngIf="sortColumn === 'status' && sortDirection === 'asc'"></kit-icon-sort-asc>
+                        <kit-icon-sort-desc *ngIf="sortColumn === 'status' && sortDirection === 'desc'"></kit-icon-sort-desc>
+                    </th>
+                    <th class="sortable" (click)="sort('location')">
+                        Location
+                        <kit-icon-sort-asc *ngIf="sortColumn === 'location' && sortDirection === 'asc'"></kit-icon-sort-asc>
+                        <kit-icon-sort-desc *ngIf="sortColumn === 'location' && sortDirection === 'desc'"></kit-icon-sort-desc>
+                    </th>
+                    <th class="sortable" (click)="sort('os')">
+                        OS
+                        <kit-icon-sort-asc *ngIf="sortColumn === 'os' && sortDirection === 'asc'"></kit-icon-sort-asc>
+                        <kit-icon-sort-desc *ngIf="sortColumn === 'os' && sortDirection === 'desc'"></kit-icon-sort-desc>
+                    </th>
+                    <th class="sortable" (click)="sort('cpuCores')">
+                        CPU
+                        <kit-icon-sort-asc *ngIf="sortColumn === 'cpuCores' && sortDirection === 'asc'"></kit-icon-sort-asc>
+                        <kit-icon-sort-desc *ngIf="sortColumn === 'cpuCores' && sortDirection === 'desc'"></kit-icon-sort-desc>
+                    </th>
+                    <th class="sortable" (click)="sort('ramGb')">
+                        RAM
+                        <kit-icon-sort-asc *ngIf="sortColumn === 'ramGb' && sortDirection === 'asc'"></kit-icon-sort-asc>
+                        <kit-icon-sort-desc *ngIf="sortColumn === 'ramGb' && sortDirection === 'desc'"></kit-icon-sort-desc>
+                    </th>
+                    <th class="sortable" (click)="sort('storageGb')">
+                        Storage
+                        <kit-icon-sort-asc *ngIf="sortColumn === 'storageGb' && sortDirection === 'asc'"></kit-icon-sort-asc>
+                        <kit-icon-sort-desc *ngIf="sortColumn === 'storageGb' && sortDirection === 'desc'"></kit-icon-sort-desc>
+                    </th>
+                    <th class="sortable" (click)="sort('uptimeHours')">
+                        Uptime
+                        <kit-icon-sort-asc *ngIf="sortColumn === 'uptimeHours' && sortDirection === 'asc'"></kit-icon-sort-asc>
+                        <kit-icon-sort-desc *ngIf="sortColumn === 'uptimeHours' && sortDirection === 'desc'"></kit-icon-sort-desc>
+                    </th>
                     <th class="col-action"></th>
                 </tr>
             </thead>

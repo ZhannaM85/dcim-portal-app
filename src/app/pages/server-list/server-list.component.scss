@@ -65,6 +65,22 @@
             letter-spacing: 0.04em;
             color: var(--color-text-secondary);
             border-bottom: 2px solid var(--color-border);
+
+            &.sortable {
+                cursor: pointer;
+                user-select: none;
+
+                &:hover {
+                    color: var(--color-text);
+                    background: #f1f5f9;
+                }
+
+                kit-icon-sort-asc,
+                kit-icon-sort-desc {
+                    vertical-align: middle;
+                    margin-left: 4px;
+                }
+            }
         }
 
         td {
