@@ -25,7 +25,7 @@ export class ServerListComponent implements OnInit {
 
     public selectedIds = new Set<string>();
 
-    public sortColumn: SortColumn | null = null;
+    public sortColumn: SortColumn | null = 'hostname';
 
     public sortDirection: SortDirection = 'asc';
 
