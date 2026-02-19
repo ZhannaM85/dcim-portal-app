@@ -7,11 +7,12 @@ import { ButtonModule, CheckboxModule, DropdownModule, InputModule, IconModule }
 
 import { ServerListComponent } from './server-list.component';
 import { AddServerDialogComponent } from './add-server-dialog/add-server-dialog.component';
+import { HighlightPipe } from './highlight.pipe';
 
 const routes: Routes = [{ path: '', component: ServerListComponent }];
 
 @NgModule({
-    declarations: [ServerListComponent, AddServerDialogComponent],
+    declarations: [ServerListComponent, AddServerDialogComponent, HighlightPipe],
     imports: [
         CommonModule,
         RouterModule.forChild(routes),

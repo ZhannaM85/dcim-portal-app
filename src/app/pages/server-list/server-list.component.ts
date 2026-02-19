@@ -1,6 +1,8 @@
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Dialog } from '@angular/cdk/dialog';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { DropdownOption } from '@zhannam85/ui-kit';
 import { Server } from '../../models/server.model';
 import { ServerService } from '../../services/server.service';
@@ -11,6 +13,8 @@ type SortDirection = 'asc' | 'desc';
 
 const NUMERIC_COLUMNS: ReadonlySet<SortColumn> = new Set(['cpuCores', 'ramGb', 'storageGb', 'uptimeHours']);
 
+const MIN_SEARCH_LENGTH = 3;
+
 @Component({
     standalone: false,
     selector: 'app-server-list',
@@ -18,7 +22,7 @@ const NUMERIC_COLUMNS: ReadonlySet<SortColumn> = new Set(['cpuCores', 'ramGb', '
     styleUrls: ['./server-list.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ServerListComponent implements OnInit {
+export class ServerListComponent implements OnInit, OnDestroy {
     public servers: Server[] = [];
 
     public filteredServers: Server[] = [];
@@ -28,6 +32,15 @@ export class ServerListComponent implements OnInit {
     public sortColumn: SortColumn | null = 'hostname';
 
     public sortDirection: SortDirection = 'asc';
+
+    public searchTerm = '';
+
+    public selectedSearchType = 'hostname';
+
+    public searchTypeOptions: DropdownOption[] = [
+        { label: 'Hostname', value: 'hostname' },
+        { label: 'Operating System', value: 'os' },
+    ];
 
     public statusOptions: DropdownOption[] = [
         { label: 'All Statuses', value: '' },
@@ -47,6 +60,10 @@ export class ServerListComponent implements OnInit {
 
     public selectedLocation = '';
 
+    private searchSubject = new Subject<string>();
+
+    private searchSubscription!: Subscription;
+
     constructor(
         private serverService: ServerService,
         private router: Router,
@@ -55,7 +72,20 @@ export class ServerListComponent implements OnInit {
     ) {}
 
     public ngOnInit(): void {
+        this.searchSubscription = this.searchSubject.pipe(
+            debounceTime(300),
+            distinctUntilChanged(),
+        ).subscribe((term) => {
+            this.searchTerm = term;
+            this.applyFilters();
+            this.cdr.markForCheck();
+        });
+
         this.loadServers();
+    }
+
+    public ngOnDestroy(): void {
+        this.searchSubscription.unsubscribe();
     }
 
     public loadServers(): void {
@@ -64,12 +94,22 @@ export class ServerListComponent implements OnInit {
     }
 
     public applyFilters(): void {
+        const searchActive = this.searchTerm.length >= MIN_SEARCH_LENGTH;
+        const term = this.searchTerm.toLowerCase();
+
         this.filteredServers = this.servers.filter((s) => {
             const matchesStatus =
                 !this.selectedStatus || s.status === this.selectedStatus;
             const matchesLocation =
                 !this.selectedLocation || s.location === this.selectedLocation;
-            return matchesStatus && matchesLocation;
+
+            let matchesSearch = true;
+            if (searchActive) {
+                const field = this.selectedSearchType === 'os' ? s.os : s.hostname;
+                matchesSearch = field.toLowerCase().includes(term);
+            }
+
+            return matchesStatus && matchesLocation && matchesSearch;
         });
 
         if (this.sortColumn) {
@@ -93,6 +133,34 @@ export class ServerListComponent implements OnInit {
                 this.selectedIds.delete(id);
             }
         });
+    }
+
+    public onSearchInput(value: string): void {
+        this.searchSubject.next(value);
+    }
+
+    public onSearchCleared(): void {
+        this.searchTerm = '';
+        this.applyFilters();
+    }
+
+    public onSearchTypeChange(value: string): void {
+        this.selectedSearchType = value;
+        if (this.searchTerm.length >= MIN_SEARCH_LENGTH) {
+            this.applyFilters();
+        }
+    }
+
+    public clearAllFilters(): void {
+        this.searchTerm = '';
+        this.selectedSearchType = 'hostname';
+        this.selectedStatus = '';
+        this.selectedLocation = '';
+        this.applyFilters();
+    }
+
+    public get hasActiveFilters(): boolean {
+        return !!(this.searchTerm || this.selectedStatus || this.selectedLocation);
     }
 
     public sort(column: SortColumn): void {
