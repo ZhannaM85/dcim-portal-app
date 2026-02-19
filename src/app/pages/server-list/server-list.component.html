@@ -6,6 +6,23 @@
 
     <div class="server-list__toolbar">
         <div class="server-list__filters">
+            <div class="server-list__search">
+                <kit-dropdown
+                    [options]="searchTypeOptions"
+                    placeholder="All Fields"
+                    [selectedValue]="selectedSearchType"
+                    (selectionChange)="onSearchTypeChange($event)">
+                </kit-dropdown>
+
+                <kit-input
+                    class="server-list__search-input"
+                    placeholder="Search servers (min 3 chars)..."
+                    [clearable]="true"
+                    (valueChange)="onSearchInput($event)"
+                    (cleared)="onSearchCleared()">
+                </kit-input>
+            </div>
+
             <kit-dropdown
                 [options]="statusOptions"
                 placeholder="All Statuses"
@@ -117,8 +134,8 @@
                     </td>
                     <td>
                         <a class="server-list__hostname"
-                           [routerLink]="['/servers', server.id]">
-                            {{ server.hostname }}
+                           [routerLink]="['/servers', server.id]"
+                           [innerHTML]="server.hostname | highlight:searchTerm">
                         </a>
                     </td>
                     <td class="mono">{{ server.ipAddress }}</td>
@@ -129,7 +146,7 @@
                         </span>
                     </td>
                     <td>{{ server.location }}</td>
-                    <td>{{ server.os }}</td>
+                    <td [innerHTML]="server.os | highlight:searchTerm"></td>
                     <td>{{ server.cpuCores }} cores</td>
                     <td>{{ server.ramGb }} GB</td>
                     <td>{{ server.storageGb }} GB</td>
@@ -145,7 +162,22 @@
                 </tr>
                 <tr *ngIf="filteredServers.length === 0">
                     <td colspan="11" class="server-list__empty">
-                        No servers match the current filters.
+                        <ng-container *ngIf="searchTerm; else noFilterMatch">
+                            No servers found for "<strong>{{ searchTerm }}</strong>".
+                            Try a different search or
+                            <a class="server-list__clear-link"
+                               tabindex="0"
+                               (click)="clearAllFilters()"
+                               (keydown.enter)="clearAllFilters()">clear all filters</a>.
+                        </ng-container>
+                        <ng-template #noFilterMatch>
+                            No servers match the current filters.
+                            <a *ngIf="hasActiveFilters"
+                               class="server-list__clear-link"
+                               tabindex="0"
+                               (click)="clearAllFilters()"
+                               (keydown.enter)="clearAllFilters()">Clear all filters</a>
+                        </ng-template>
                     </td>
                 </tr>
             </tbody>
