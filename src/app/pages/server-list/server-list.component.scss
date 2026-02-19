@@ -41,6 +41,10 @@
 
     &__search-input {
         width: 260px;
+
+        ::ng-deep .lib-input {
+            min-height: 48px;
+        }
     }
 
     &__actions {
