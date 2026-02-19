@@ -30,6 +30,17 @@
         display: flex;
         gap: 12px;
         flex-wrap: wrap;
+        align-items: flex-start;
+    }
+
+    &__search {
+        display: flex;
+        gap: 8px;
+        align-items: flex-start;
+    }
+
+    &__search-input {
+        width: 260px;
     }
 
     &__actions {
@@ -115,6 +126,16 @@
         padding: 40px 14px !important;
         color: var(--color-text-secondary);
         font-style: italic;
+    }
+
+    &__clear-link {
+        color: var(--color-primary);
+        cursor: pointer;
+        text-decoration: underline;
+
+        &:hover {
+            color: var(--color-primary-hover, #3a7bd5);
+        }
     }
 }
 
