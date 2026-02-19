@@ -35,10 +35,9 @@ export class ServerListComponent implements OnInit, OnDestroy {
 
     public searchTerm = '';
 
-    public selectedSearchType = '';
+    public selectedSearchType = 'hostname';
 
     public searchTypeOptions: DropdownOption[] = [
-        { label: 'All Fields', value: '' },
         { label: 'Hostname', value: 'hostname' },
         { label: 'Operating System', value: 'os' },
     ];
@@ -106,18 +105,8 @@ export class ServerListComponent implements OnInit, OnDestroy {
 
             let matchesSearch = true;
             if (searchActive) {
-                switch (this.selectedSearchType) {
-                    case 'hostname':
-                        matchesSearch = s.hostname.toLowerCase().includes(term);
-                        break;
-                    case 'os':
-                        matchesSearch = s.os.toLowerCase().includes(term);
-                        break;
-                    default:
-                        matchesSearch =
-                            s.hostname.toLowerCase().includes(term) ||
-                            s.os.toLowerCase().includes(term);
-                }
+                const field = this.selectedSearchType === 'os' ? s.os : s.hostname;
+                matchesSearch = field.toLowerCase().includes(term);
             }
 
             return matchesStatus && matchesLocation && matchesSearch;
@@ -164,7 +153,7 @@ export class ServerListComponent implements OnInit, OnDestroy {
 
     public clearAllFilters(): void {
         this.searchTerm = '';
-        this.selectedSearchType = '';
+        this.selectedSearchType = 'hostname';
         this.selectedStatus = '';
         this.selectedLocation = '';
         this.applyFilters();
