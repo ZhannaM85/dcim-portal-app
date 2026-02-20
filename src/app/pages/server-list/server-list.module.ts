@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DialogModule } from '@angular/cdk/dialog';
+import { TranslateModule } from '@ngx-translate/core';
 import { ButtonModule, CheckboxModule, DropdownModule, InputModule, IconModule } from '@zhannam85/ui-kit';
 
 import { ServerListComponent } from './server-list.component';
@@ -18,6 +19,7 @@ const routes: Routes = [{ path: '', component: ServerListComponent }];
         RouterModule.forChild(routes),
         ReactiveFormsModule,
         DialogModule,
+        TranslateModule,
         ButtonModule,
         CheckboxModule,
         DropdownModule,

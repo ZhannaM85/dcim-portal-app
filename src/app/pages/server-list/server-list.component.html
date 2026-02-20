@@ -1,7 +1,7 @@
 <div class="server-list">
     <div class="server-list__header">
-        <h1 class="server-list__title">Servers</h1>
-        <span class="server-list__count">{{ filteredServers.length }} of {{ servers.length }} servers</span>
+        <h1 class="server-list__title">{{ 'SERVER_LIST.TITLE' | translate }}</h1>
+        <span class="server-list__count">{{ 'SERVER_LIST.COUNT' | translate:{filtered: filteredServers.length, total: servers.length} }}</span>
     </div>
 
     <div class="server-list__toolbar">
@@ -9,14 +9,14 @@
             <div class="server-list__search">
                 <kit-dropdown
                     [options]="searchTypeOptions"
-                    placeholder="All Fields"
+                    [placeholder]="'SERVER_LIST.ALL_FIELDS' | translate"
                     [selectedValue]="selectedSearchType"
                     (selectionChange)="onSearchTypeChange($event)">
                 </kit-dropdown>
 
                 <kit-input
                     class="server-list__search-input"
-                    placeholder="Search servers (min 3 chars)..."
+                    [placeholder]="'SERVER_LIST.SEARCH_PLACEHOLDER' | translate"
                     [clearable]="true"
                     (valueChange)="onSearchInput($event)"
                     (cleared)="onSearchCleared()">
@@ -25,14 +25,14 @@
 
             <kit-dropdown
                 [options]="statusOptions"
-                placeholder="All Statuses"
+                [placeholder]="'SERVER_LIST.ALL_STATUSES' | translate"
                 [selectedValue]="selectedStatus"
                 (selectionChange)="onStatusFilterChange($event)">
             </kit-dropdown>
 
             <kit-dropdown
                 [options]="locationOptions"
-                placeholder="All Locations"
+                [placeholder]="'SERVER_LIST.ALL_LOCATIONS' | translate"
                 [selectedValue]="selectedLocation"
                 (selectionChange)="onLocationFilterChange($event)">
             </kit-dropdown>
@@ -40,14 +40,14 @@
 
         <div class="server-list__actions">
             <kit-button
-                label="Add Server"
+                [label]="'SERVER_LIST.ADD_SERVER' | translate"
                 variant="primary"
                 size="small"
                 (buttonClicked)="onAddServer()">
             </kit-button>
 
             <kit-button
-                label="Restart Selected"
+                [label]="'SERVER_LIST.RESTART_SELECTED' | translate"
                 variant="secondary"
                 size="small"
                 [disabled]="!hasSelection"
@@ -55,7 +55,7 @@
             </kit-button>
 
             <kit-button
-                label="Delete Selected"
+                [label]="'SERVER_LIST.DELETE_SELECTED' | translate"
                 variant="danger"
                 size="small"
                 [disabled]="!hasSelection"
@@ -76,47 +76,47 @@
                         </kit-checkbox>
                     </th>
                     <th class="sortable" (click)="sort('hostname')">
-                        Hostname
+                        {{ 'COMMON.HOSTNAME' | translate }}
                         <kit-icon-sort-asc *ngIf="sortColumn === 'hostname' && sortDirection === 'asc'"></kit-icon-sort-asc>
                         <kit-icon-sort-desc *ngIf="sortColumn === 'hostname' && sortDirection === 'desc'"></kit-icon-sort-desc>
                     </th>
                     <th class="sortable" (click)="sort('ipAddress')">
-                        IP Address
+                        {{ 'COMMON.IP_ADDRESS' | translate }}
                         <kit-icon-sort-asc *ngIf="sortColumn === 'ipAddress' && sortDirection === 'asc'"></kit-icon-sort-asc>
                         <kit-icon-sort-desc *ngIf="sortColumn === 'ipAddress' && sortDirection === 'desc'"></kit-icon-sort-desc>
                     </th>
                     <th class="sortable" (click)="sort('status')">
-                        Status
+                        {{ 'COMMON.STATUS' | translate }}
                         <kit-icon-sort-asc *ngIf="sortColumn === 'status' && sortDirection === 'asc'"></kit-icon-sort-asc>
                         <kit-icon-sort-desc *ngIf="sortColumn === 'status' && sortDirection === 'desc'"></kit-icon-sort-desc>
                     </th>
                     <th class="sortable" (click)="sort('location')">
-                        Location
+                        {{ 'COMMON.LOCATION' | translate }}
                         <kit-icon-sort-asc *ngIf="sortColumn === 'location' && sortDirection === 'asc'"></kit-icon-sort-asc>
                         <kit-icon-sort-desc *ngIf="sortColumn === 'location' && sortDirection === 'desc'"></kit-icon-sort-desc>
                     </th>
                     <th class="sortable" (click)="sort('os')">
-                        OS
+                        {{ 'COMMON.OS' | translate }}
                         <kit-icon-sort-asc *ngIf="sortColumn === 'os' && sortDirection === 'asc'"></kit-icon-sort-asc>
                         <kit-icon-sort-desc *ngIf="sortColumn === 'os' && sortDirection === 'desc'"></kit-icon-sort-desc>
                     </th>
                     <th class="sortable" (click)="sort('cpuCores')">
-                        CPU
+                        {{ 'COMMON.CPU' | translate }}
                         <kit-icon-sort-asc *ngIf="sortColumn === 'cpuCores' && sortDirection === 'asc'"></kit-icon-sort-asc>
                         <kit-icon-sort-desc *ngIf="sortColumn === 'cpuCores' && sortDirection === 'desc'"></kit-icon-sort-desc>
                     </th>
                     <th class="sortable" (click)="sort('ramGb')">
-                        RAM
+                        {{ 'COMMON.RAM' | translate }}
                         <kit-icon-sort-asc *ngIf="sortColumn === 'ramGb' && sortDirection === 'asc'"></kit-icon-sort-asc>
                         <kit-icon-sort-desc *ngIf="sortColumn === 'ramGb' && sortDirection === 'desc'"></kit-icon-sort-desc>
                     </th>
                     <th class="sortable" (click)="sort('storageGb')">
-                        Storage
+                        {{ 'COMMON.STORAGE' | translate }}
                         <kit-icon-sort-asc *ngIf="sortColumn === 'storageGb' && sortDirection === 'asc'"></kit-icon-sort-asc>
                         <kit-icon-sort-desc *ngIf="sortColumn === 'storageGb' && sortDirection === 'desc'"></kit-icon-sort-desc>
                     </th>
                     <th class="sortable" (click)="sort('uptimeHours')">
-                        Uptime
+                        {{ 'COMMON.UPTIME' | translate }}
                         <kit-icon-sort-asc *ngIf="sortColumn === 'uptimeHours' && sortDirection === 'asc'"></kit-icon-sort-asc>
                         <kit-icon-sort-desc *ngIf="sortColumn === 'uptimeHours' && sortDirection === 'desc'"></kit-icon-sort-desc>
                     </th>
@@ -147,13 +147,13 @@
                     </td>
                     <td>{{ server.location }}</td>
                     <td [innerHTML]="server.os | highlight:searchTerm"></td>
-                    <td>{{ server.cpuCores }} cores</td>
-                    <td>{{ server.ramGb }} GB</td>
-                    <td>{{ server.storageGb }} GB</td>
+                    <td>{{ server.cpuCores }} {{ 'COMMON.CORES' | translate }}</td>
+                    <td>{{ server.ramGb }} {{ 'COMMON.GB' | translate }}</td>
+                    <td>{{ server.storageGb }} {{ 'COMMON.GB' | translate }}</td>
                     <td>{{ formatUptime(server.uptimeHours) }}</td>
                     <td class="col-action">
                         <kit-button
-                            label="View"
+                            [label]="'COMMON.VIEW' | translate"
                             variant="secondary"
                             size="small"
                             (buttonClicked)="navigateToDetail(server.id)">
@@ -163,20 +163,20 @@
                 <tr *ngIf="filteredServers.length === 0">
                     <td colspan="11" class="server-list__empty">
                         <ng-container *ngIf="searchTerm; else noFilterMatch">
-                            No servers found for "<strong>{{ searchTerm }}</strong>".
-                            Try a different search or
+                            {{ 'SERVER_LIST.EMPTY.NO_SEARCH_RESULTS' | translate:{term: searchTerm} }}
+                            {{ 'SERVER_LIST.EMPTY.TRY_DIFFERENT' | translate }}
                             <a class="server-list__clear-link"
                                tabindex="0"
                                (click)="clearAllFilters()"
-                               (keydown.enter)="clearAllFilters()">clear all filters</a>.
+                               (keydown.enter)="clearAllFilters()">{{ 'SERVER_LIST.EMPTY.CLEAR_FILTERS_LINK' | translate }}</a>.
                         </ng-container>
                         <ng-template #noFilterMatch>
-                            No servers match the current filters.
+                            {{ 'SERVER_LIST.EMPTY.NO_FILTER_MATCH' | translate }}
                             <a *ngIf="hasActiveFilters"
                                class="server-list__clear-link"
                                tabindex="0"
                                (click)="clearAllFilters()"
-                               (keydown.enter)="clearAllFilters()">Clear all filters</a>
+                               (keydown.enter)="clearAllFilters()">{{ 'SERVER_LIST.EMPTY.CLEAR_ALL_FILTERS' | translate }}</a>
                         </ng-template>
                     </td>
                 </tr>

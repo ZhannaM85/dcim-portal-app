@@ -1,10 +1,16 @@
 <header class="app-header">
     <div class="app-header__brand" routerLink="/servers">
         <span class="app-header__logo">DC</span>
-        <span class="app-header__title">DCIM Portal</span>
+        <span class="app-header__title">{{ 'APP.TITLE' | translate }}</span>
     </div>
     <nav class="app-header__nav">
-        <span class="app-header__subtitle">Data Center Infrastructure Management</span>
+        <span class="app-header__subtitle">{{ 'APP.SUBTITLE' | translate }}</span>
+        <kit-dropdown
+            class="app-header__lang-switcher"
+            [options]="languageOptions"
+            [selectedValue]="currentLang"
+            (selectionChange)="switchLanguage($event)">
+        </kit-dropdown>
     </nav>
 </header>
 
