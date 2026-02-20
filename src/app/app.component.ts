@@ -14,12 +14,13 @@ export class AppComponent {
         { label: 'Русский', value: 'ru' },
         { label: 'Deutsch', value: 'de' },
         { label: 'Français', value: 'fr' },
+        { label: 'Nederlands', value: 'nl' },
     ];
 
     public currentLang: string;
 
     constructor(private translate: TranslateService) {
-        this.translate.addLangs(['en', 'ru', 'de', 'fr']);
+        this.translate.addLangs(['en', 'ru', 'de', 'fr', 'nl']);
         this.translate.setDefaultLang('en');
 
         const savedLang = localStorage.getItem('app-lang');
