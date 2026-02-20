@@ -64,7 +64,7 @@
     }
 
     &__lang-switcher {
-        width: 130px;
+        width: 160px;
         flex-shrink: 0;
 
         ::ng-deep .lib-dropdown {
@@ -74,7 +74,7 @@
         ::ng-deep .lib-dropdown__menu {
             left: auto;
             right: 0;
-            min-width: 130px;
+            min-width: 160px;
         }
     }
 }
