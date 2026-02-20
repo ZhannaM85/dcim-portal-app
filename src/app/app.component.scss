@@ -7,7 +7,6 @@
 .app-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     padding: 0 24px;
     height: 56px;
     background-color: #1e293b;
@@ -48,7 +47,11 @@
     &__nav {
         display: flex;
         align-items: center;
+        justify-content: flex-end;
         gap: 16px;
+        flex: 1;
+        min-width: 0;
+        margin-left: 24px;
     }
 
     &__subtitle {
@@ -57,7 +60,7 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        max-width: 320px;
+        min-width: 0;
     }
 
     &__lang-switcher {
