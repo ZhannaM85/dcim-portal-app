@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DialogRef } from '@angular/cdk/dialog';
+import { TranslateService } from '@ngx-translate/core';
 import { DropdownOption } from '@zhannam85/ui-kit';
 import { ServerService } from '../../../services/server.service';
 import { Server, ServerLocation, ServerStatus } from '../../../models/server.model';
@@ -14,26 +15,19 @@ import { Server, ServerLocation, ServerStatus } from '../../../models/server.mod
 export class AddServerDialogComponent {
     public serverForm: FormGroup;
 
-    public locationOptions: DropdownOption[] = [
-        { label: 'DC-East', value: 'DC-East' },
-        { label: 'DC-West', value: 'DC-West' },
-        { label: 'DC-Europe', value: 'DC-Europe' },
-    ];
+    public locationOptions: DropdownOption[] = [];
 
-    public statusOptions: DropdownOption[] = [
-        { label: 'Running', value: 'running' },
-        { label: 'Stopped', value: 'stopped' },
-        { label: 'Maintenance', value: 'maintenance' },
-    ];
+    public statusOptions: DropdownOption[] = [];
 
-    // IP address validation regex
     private ipRegex = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
 
     constructor(
         private fb: FormBuilder,
         private dialogRef: DialogRef<Server>,
-        private serverService: ServerService
+        private serverService: ServerService,
+        private translate: TranslateService
     ) {
+        this.buildTranslatedOptions();
         this.serverForm = this.fb.group({
             hostname: ['', [Validators.required, Validators.minLength(3)]],
             ipAddress: ['', [Validators.required, Validators.pattern(this.ipRegex)]],
@@ -108,20 +102,36 @@ export class AddServerDialogComponent {
     public getErrorMessage(fieldName: string): string {
         const control = this.serverForm.get(fieldName);
         if (control?.hasError('required')) {
-            return `${fieldName} is required`;
+            return this.translate.instant('COMMON.VALIDATION.REQUIRED', { field: fieldName });
         }
         if (control?.hasError('minlength')) {
-            return `${fieldName} must be at least ${control.errors?.['minlength'].requiredLength} characters`;
+            return this.translate.instant('COMMON.VALIDATION.MIN_LENGTH', {
+                field: fieldName,
+                length: control.errors?.['minlength'].requiredLength,
+            });
         }
         if (control?.hasError('pattern')) {
-            return 'Invalid IP address format';
+            return this.translate.instant('COMMON.VALIDATION.INVALID_IP');
         }
         if (control?.hasError('min')) {
-            return `Value must be at least ${control.errors?.['min'].min}`;
+            return this.translate.instant('COMMON.VALIDATION.MIN_VALUE', { min: control.errors?.['min'].min });
         }
         if (control?.hasError('max')) {
-            return `Value must be at most ${control.errors?.['max'].max}`;
+            return this.translate.instant('COMMON.VALIDATION.MAX_VALUE', { max: control.errors?.['max'].max });
         }
         return '';
+    }
+
+    private buildTranslatedOptions(): void {
+        this.locationOptions = [
+            { label: this.translate.instant('COMMON.LOCATIONS.DC_EAST'), value: 'DC-East' },
+            { label: this.translate.instant('COMMON.LOCATIONS.DC_WEST'), value: 'DC-West' },
+            { label: this.translate.instant('COMMON.LOCATIONS.DC_EUROPE'), value: 'DC-Europe' },
+        ];
+        this.statusOptions = [
+            { label: this.translate.instant('COMMON.STATUSES.RUNNING'), value: 'running' },
+            { label: this.translate.instant('COMMON.STATUSES.STOPPED'), value: 'stopped' },
+            { label: this.translate.instant('COMMON.STATUSES.MAINTENANCE'), value: 'maintenance' },
+        ];
     }
 }

@@ -1,0 +1,99 @@
+{
+  "APP": {
+    "TITLE": "Portail DCIM",
+    "SUBTITLE": "Gestion de l'infrastructure du centre de données"
+  },
+  "COMMON": {
+    "HOSTNAME": "Nom d'hôte",
+    "IP_ADDRESS": "Adresse IP",
+    "STATUS": "Statut",
+    "LOCATION": "Emplacement",
+    "OS": "SE",
+    "OPERATING_SYSTEM": "Système d'exploitation",
+    "CPU": "CPU",
+    "CPU_CORES": "Cœurs CPU",
+    "RAM": "RAM",
+    "RAM_GB": "RAM (Go)",
+    "STORAGE": "Stockage",
+    "STORAGE_GB": "Stockage (Go)",
+    "UPTIME": "Disponibilité",
+    "OFFLINE": "Hors ligne",
+    "CANCEL": "Annuler",
+    "SAVE": "Enregistrer",
+    "EDIT": "Modifier",
+    "VIEW": "Voir",
+    "CORES": "cœurs",
+    "GB": "Go",
+    "STATUSES": {
+      "RUNNING": "En cours",
+      "STOPPED": "Arrêté",
+      "MAINTENANCE": "Maintenance"
+    },
+    "LOCATIONS": {
+      "DC_EAST": "CD-Est",
+      "DC_WEST": "CD-Ouest",
+      "DC_EUROPE": "CD-Europe"
+    },
+    "VALIDATION": {
+      "REQUIRED": "{{field}} est requis",
+      "MIN_LENGTH": "{{field}} doit contenir au moins {{length}} caractères",
+      "INVALID_IP": "Format d'adresse IP invalide",
+      "MIN_VALUE": "La valeur doit être au moins {{min}}",
+      "MAX_VALUE": "La valeur doit être au plus {{max}}"
+    }
+  },
+  "SERVER_LIST": {
+    "TITLE": "Serveurs",
+    "COUNT": "{{filtered}} sur {{total}} serveurs",
+    "SEARCH_PLACEHOLDER": "Rechercher des serveurs (min 3 car.)...",
+    "ALL_FIELDS": "Tous les champs",
+    "ALL_STATUSES": "Tous les statuts",
+    "ALL_LOCATIONS": "Tous les emplacements",
+    "ADD_SERVER": "Ajouter un serveur",
+    "RESTART_SELECTED": "Redémarrer la sélection",
+    "DELETE_SELECTED": "Supprimer la sélection",
+    "SEARCH_TYPE": {
+      "HOSTNAME": "Nom d'hôte",
+      "OS": "Système d'exploitation"
+    },
+    "EMPTY": {
+      "NO_SEARCH_RESULTS": "Aucun serveur trouvé pour \"{{term}}\".",
+      "TRY_DIFFERENT": "Essayez une autre recherche ou",
+      "CLEAR_FILTERS_LINK": "effacez tous les filtres",
+      "NO_FILTER_MATCH": "Aucun serveur ne correspond aux filtres actuels.",
+      "CLEAR_ALL_FILTERS": "Effacer tous les filtres"
+    }
+  },
+  "SERVER_DETAIL": {
+    "BACK": "Retour aux serveurs",
+    "RESTART": "Redémarrer",
+    "SHUT_DOWN": "Arrêter",
+    "SECTION": {
+      "NETWORK": "Réseau",
+      "SYSTEM": "Système",
+      "HARDWARE": "Matériel"
+    },
+    "PLACEHOLDER": {
+      "HOSTNAME": "ex. web-prod-01",
+      "IP_ADDRESS": "ex. 10.0.1.10",
+      "SELECT_LOCATION": "Sélectionner l'emplacement",
+      "OS": "ex. Ubuntu 22.04 LTS",
+      "CPU_CORES": "4",
+      "RAM": "8",
+      "STORAGE": "100"
+    }
+  },
+  "ADD_SERVER": {
+    "TITLE": "Ajouter un nouveau serveur",
+    "CLOSE_DIALOG": "Fermer le dialogue",
+    "SUBMIT": "Ajouter le serveur",
+    "SELECT_STATUS": "Sélectionner le statut"
+  },
+  "CHART": {
+    "CPU_USAGE_TITLE": "Utilisation du CPU dans le temps",
+    "TIME": "Temps",
+    "CPU_USAGE_PERCENT": "Utilisation du CPU (%)",
+    "CPU_USAGE_LABEL": "Utilisation du CPU",
+    "CPU_USAGE_TOOLTIP": "Utilisation du CPU : {{value}}%"
+  }
+}

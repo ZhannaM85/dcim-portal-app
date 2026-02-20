@@ -1,0 +1,99 @@
+{
+  "APP": {
+    "TITLE": "DCIM Portaal",
+    "SUBTITLE": "Beheer van datacenterinfrastructuur"
+  },
+  "COMMON": {
+    "HOSTNAME": "Hostnaam",
+    "IP_ADDRESS": "IP-adres",
+    "STATUS": "Status",
+    "LOCATION": "Locatie",
+    "OS": "OS",
+    "OPERATING_SYSTEM": "Besturingssysteem",
+    "CPU": "CPU",
+    "CPU_CORES": "CPU-kernen",
+    "RAM": "RAM",
+    "RAM_GB": "RAM (GB)",
+    "STORAGE": "Opslag",
+    "STORAGE_GB": "Opslag (GB)",
+    "UPTIME": "Uptime",
+    "OFFLINE": "Offline",
+    "CANCEL": "Annuleren",
+    "SAVE": "Opslaan",
+    "EDIT": "Bewerken",
+    "VIEW": "Bekijken",
+    "CORES": "kernen",
+    "GB": "GB",
+    "STATUSES": {
+      "RUNNING": "Actief",
+      "STOPPED": "Gestopt",
+      "MAINTENANCE": "Onderhoud"
+    },
+    "LOCATIONS": {
+      "DC_EAST": "DC-Oost",
+      "DC_WEST": "DC-West",
+      "DC_EUROPE": "DC-Europa"
+    },
+    "VALIDATION": {
+      "REQUIRED": "{{field}} is verplicht",
+      "MIN_LENGTH": "{{field}} moet minstens {{length}} tekens bevatten",
+      "INVALID_IP": "Ongeldig IP-adresformaat",
+      "MIN_VALUE": "Waarde moet minstens {{min}} zijn",
+      "MAX_VALUE": "Waarde mag maximaal {{max}} zijn"
+    }
+  },
+  "SERVER_LIST": {
+    "TITLE": "Servers",
+    "COUNT": "{{filtered}} van {{total}} servers",
+    "SEARCH_PLACEHOLDER": "Servers zoeken (min 3 tekens)...",
+    "ALL_FIELDS": "Alle velden",
+    "ALL_STATUSES": "Alle statussen",
+    "ALL_LOCATIONS": "Alle locaties",
+    "ADD_SERVER": "Server toevoegen",
+    "RESTART_SELECTED": "Selectie herstarten",
+    "DELETE_SELECTED": "Selectie verwijderen",
+    "SEARCH_TYPE": {
+      "HOSTNAME": "Hostnaam",
+      "OS": "Besturingssysteem"
+    },
+    "EMPTY": {
+      "NO_SEARCH_RESULTS": "Geen servers gevonden voor \"{{term}}\".",
+      "TRY_DIFFERENT": "Probeer een andere zoekopdracht of",
+      "CLEAR_FILTERS_LINK": "wis alle filters",
+      "NO_FILTER_MATCH": "Geen servers komen overeen met de huidige filters.",
+      "CLEAR_ALL_FILTERS": "Alle filters wissen"
+    }
+  },
+  "SERVER_DETAIL": {
+    "BACK": "Terug naar servers",
+    "RESTART": "Herstarten",
+    "SHUT_DOWN": "Afsluiten",
+    "SECTION": {
+      "NETWORK": "Netwerk",
+      "SYSTEM": "Systeem",
+      "HARDWARE": "Hardware"
+    },
+    "PLACEHOLDER": {
+      "HOSTNAME": "bijv. web-prod-01",
+      "IP_ADDRESS": "bijv. 10.0.1.10",
+      "SELECT_LOCATION": "Selecteer locatie",
+      "OS": "bijv. Ubuntu 22.04 LTS",
+      "CPU_CORES": "4",
+      "RAM": "8",
+      "STORAGE": "100"
+    }
+  },
+  "ADD_SERVER": {
+    "TITLE": "Nieuwe server toevoegen",
+    "CLOSE_DIALOG": "Dialoog sluiten",
+    "SUBMIT": "Server toevoegen",
+    "SELECT_STATUS": "Selecteer status"
+  },
+  "CHART": {
+    "CPU_USAGE_TITLE": "CPU-gebruik in de tijd",
+    "TIME": "Tijd",
+    "CPU_USAGE_PERCENT": "CPU-gebruik (%)",
+    "CPU_USAGE_LABEL": "CPU-gebruik",
+    "CPU_USAGE_TOOLTIP": "CPU-gebruik: {{value}}%"
+  }
+}

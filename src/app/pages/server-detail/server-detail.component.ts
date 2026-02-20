@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 import { Server, ServerLocation } from '../../models/server.model';
 import { ServerService } from '../../services/server.service';
 import { DropdownOption } from '@zhannam85/ui-kit';
@@ -11,28 +13,27 @@ import { DropdownOption } from '@zhannam85/ui-kit';
     templateUrl: './server-detail.component.html',
     styleUrls: ['./server-detail.component.scss'],
 })
-export class ServerDetailComponent implements OnInit {
+export class ServerDetailComponent implements OnInit, OnDestroy {
     public server: Server | undefined;
 
     public isEditMode = false;
 
     public serverForm: FormGroup;
 
-    public locationOptions: DropdownOption[] = [
-        { label: 'DC-East', value: 'DC-East' },
-        { label: 'DC-West', value: 'DC-West' },
-        { label: 'DC-Europe', value: 'DC-Europe' },
-    ];
+    public locationOptions: DropdownOption[] = [];
 
-    // IP address validation regex
     private ipRegex = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+
+    private langSubscription!: Subscription;
 
     constructor(
         private route: ActivatedRoute,
         private router: Router,
         private serverService: ServerService,
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        private translate: TranslateService
     ) {
+        this.buildTranslatedOptions();
         this.serverForm = this.fb.group({
             hostname: ['', [Validators.required, Validators.minLength(3)]],
             ipAddress: ['', [Validators.required, Validators.pattern(this.ipRegex)]],
@@ -55,6 +56,14 @@ export class ServerDetailComponent implements OnInit {
         if (!this.server) {
             this.router.navigate(['/servers']);
         }
+
+        this.langSubscription = this.translate.onLangChange.subscribe(() => {
+            this.buildTranslatedOptions();
+        });
+    }
+
+    public ngOnDestroy(): void {
+        this.langSubscription.unsubscribe();
     }
 
     private initializeForm(): void {
@@ -90,7 +99,7 @@ export class ServerDetailComponent implements OnInit {
     }
 
     public formatUptime(hours: number): string {
-        if (hours === 0) return 'Offline';
+        if (hours === 0) return this.translate.instant('COMMON.OFFLINE');
         if (hours < 24) return `${hours}h`;
         const days = Math.floor(hours / 24);
         return `${days}d ${hours % 24}h`;
@@ -134,20 +143,31 @@ export class ServerDetailComponent implements OnInit {
     public getErrorMessage(fieldName: string): string {
         const control = this.serverForm.get(fieldName);
         if (control?.hasError('required')) {
-            return `${fieldName} is required`;
+            return this.translate.instant('COMMON.VALIDATION.REQUIRED', { field: fieldName });
         }
         if (control?.hasError('minlength')) {
-            return `${fieldName} must be at least ${control.errors?.['minlength'].requiredLength} characters`;
+            return this.translate.instant('COMMON.VALIDATION.MIN_LENGTH', {
+                field: fieldName,
+                length: control.errors?.['minlength'].requiredLength,
+            });
         }
         if (control?.hasError('pattern')) {
-            return 'Invalid IP address format';
+            return this.translate.instant('COMMON.VALIDATION.INVALID_IP');
         }
         if (control?.hasError('min')) {
-            return `Value must be at least ${control.errors?.['min'].min}`;
+            return this.translate.instant('COMMON.VALIDATION.MIN_VALUE', { min: control.errors?.['min'].min });
         }
         if (control?.hasError('max')) {
-            return `Value must be at most ${control.errors?.['max'].max}`;
+            return this.translate.instant('COMMON.VALIDATION.MAX_VALUE', { max: control.errors?.['max'].max });
         }
         return '';
+    }
+
+    private buildTranslatedOptions(): void {
+        this.locationOptions = [
+            { label: this.translate.instant('COMMON.LOCATIONS.DC_EAST'), value: 'DC-East' },
+            { label: this.translate.instant('COMMON.LOCATIONS.DC_WEST'), value: 'DC-West' },
+            { label: this.translate.instant('COMMON.LOCATIONS.DC_EUROPE'), value: 'DC-Europe' },
+        ];
     }
 }

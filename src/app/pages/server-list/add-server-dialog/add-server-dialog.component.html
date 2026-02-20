@@ -1,11 +1,11 @@
 <div class="add-server-dialog">
     <div class="add-server-dialog__header">
-        <h2 class="add-server-dialog__title">Add New Server</h2>
+        <h2 class="add-server-dialog__title">{{ 'ADD_SERVER.TITLE' | translate }}</h2>
         <button
             type="button"
             class="add-server-dialog__close"
             (click)="onCancel()"
-            aria-label="Close dialog">
+            [attr.aria-label]="'ADD_SERVER.CLOSE_DIALOG' | translate">
             <kit-icon-close [size]="20"></kit-icon-close>
         </button>
     </div>
@@ -14,9 +14,9 @@
         <div class="add-server-dialog__form">
             <div class="add-server-dialog__form-row">
                 <kit-input
-                    label="Hostname"
+                    [label]="'COMMON.HOSTNAME' | translate"
                     formControlName="hostname"
-                    placeholder="e.g., web-prod-01"
+                    [placeholder]="'SERVER_DETAIL.PLACEHOLDER.HOSTNAME' | translate"
                     [required]="true"
                     [error]="hostname?.touched && hostname?.invalid ? getErrorMessage('hostname') : ''">
                 </kit-input>
@@ -24,10 +24,10 @@
 
             <div class="add-server-dialog__form-row">
                 <kit-input
-                    label="IP Address"
+                    [label]="'COMMON.IP_ADDRESS' | translate"
                     formControlName="ipAddress"
                     type="text"
-                    placeholder="e.g., 10.0.1.10"
+                    [placeholder]="'SERVER_DETAIL.PLACEHOLDER.IP_ADDRESS' | translate"
                     [required]="true"
                     [error]="ipAddress?.touched && ipAddress?.invalid ? getErrorMessage('ipAddress') : ''">
                 </kit-input>
@@ -35,11 +35,11 @@
 
             <div class="add-server-dialog__form-row" role="group" aria-labelledby="location-label">
                 <span id="location-label" class="form-label">
-                    Location <span class="form-label__required">*</span>
+                    {{ 'COMMON.LOCATION' | translate }} <span class="form-label__required">*</span>
                 </span>
                 <kit-dropdown
                     [options]="locationOptions"
-                    placeholder="Select Location"
+                    [placeholder]="'SERVER_DETAIL.PLACEHOLDER.SELECT_LOCATION' | translate"
                     [selectedValue]="location?.value"
                     (selectionChange)="location?.setValue($event)">
                 </kit-dropdown>
@@ -50,9 +50,9 @@
 
             <div class="add-server-dialog__form-row">
                 <kit-input
-                    label="Operating System"
+                    [label]="'COMMON.OPERATING_SYSTEM' | translate"
                     formControlName="os"
-                    placeholder="e.g., Ubuntu 22.04 LTS"
+                    [placeholder]="'SERVER_DETAIL.PLACEHOLDER.OS' | translate"
                     [required]="true"
                     [error]="os?.touched && os?.invalid ? getErrorMessage('os') : ''">
                 </kit-input>
@@ -60,11 +60,11 @@
 
             <div class="add-server-dialog__form-row" role="group" aria-labelledby="status-label">
                 <span id="status-label" class="form-label">
-                    Status <span class="form-label__required">*</span>
+                    {{ 'COMMON.STATUS' | translate }} <span class="form-label__required">*</span>
                 </span>
                 <kit-dropdown
                     [options]="statusOptions"
-                    placeholder="Select Status"
+                    [placeholder]="'ADD_SERVER.SELECT_STATUS' | translate"
                     [selectedValue]="status?.value"
                     (selectionChange)="status?.setValue($event)">
                 </kit-dropdown>
@@ -73,10 +73,10 @@
             <div class="add-server-dialog__form-row add-server-dialog__form-row--inline">
                 <div class="add-server-dialog__form-col">
                     <kit-input
-                        label="CPU Cores"
+                        [label]="'COMMON.CPU_CORES' | translate"
                         formControlName="cpuCores"
                         type="number"
-                        placeholder="4"
+                        [placeholder]="'SERVER_DETAIL.PLACEHOLDER.CPU_CORES' | translate"
                         [required]="true"
                         [error]="cpuCores?.touched && cpuCores?.invalid ? getErrorMessage('cpuCores') : ''">
                     </kit-input>
@@ -84,10 +84,10 @@
 
                 <div class="add-server-dialog__form-col">
                     <kit-input
-                        label="RAM (GB)"
+                        [label]="'COMMON.RAM_GB' | translate"
                         formControlName="ramGb"
                         type="number"
-                        placeholder="8"
+                        [placeholder]="'SERVER_DETAIL.PLACEHOLDER.RAM' | translate"
                         [required]="true"
                         [error]="ramGb?.touched && ramGb?.invalid ? getErrorMessage('ramGb') : ''">
                     </kit-input>
@@ -95,10 +95,10 @@
 
                 <div class="add-server-dialog__form-col">
                     <kit-input
-                        label="Storage (GB)"
+                        [label]="'COMMON.STORAGE_GB' | translate"
                         formControlName="storageGb"
                         type="number"
-                        placeholder="100"
+                        [placeholder]="'SERVER_DETAIL.PLACEHOLDER.STORAGE' | translate"
                         [required]="true"
                         [error]="storageGb?.touched && storageGb?.invalid ? getErrorMessage('storageGb') : ''">
                     </kit-input>
@@ -108,13 +108,13 @@
 
         <div class="add-server-dialog__actions">
             <kit-button
-                label="Cancel"
+                [label]="'COMMON.CANCEL' | translate"
                 variant="secondary"
                 type="button"
                 (buttonClicked)="onCancel()">
             </kit-button>
             <kit-button
-                label="Add Server"
+                [label]="'ADD_SERVER.SUBMIT' | translate"
                 variant="primary"
                 type="submit"
                 [disabled]="serverForm.invalid"

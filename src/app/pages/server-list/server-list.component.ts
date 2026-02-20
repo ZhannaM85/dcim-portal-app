@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Dialog } from '@angular/cdk/dialog';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { TranslateService } from '@ngx-translate/core';
 import { DropdownOption } from '@zhannam85/ui-kit';
 import { Server } from '../../models/server.model';
 import { ServerService } from '../../services/server.service';
@@ -37,24 +38,11 @@ export class ServerListComponent implements OnInit, OnDestroy {
 
     public selectedSearchType = 'hostname';
 
-    public searchTypeOptions: DropdownOption[] = [
-        { label: 'Hostname', value: 'hostname' },
-        { label: 'Operating System', value: 'os' },
-    ];
+    public searchTypeOptions: DropdownOption[] = [];
 
-    public statusOptions: DropdownOption[] = [
-        { label: 'All Statuses', value: '' },
-        { label: 'Running', value: 'running' },
-        { label: 'Stopped', value: 'stopped' },
-        { label: 'Maintenance', value: 'maintenance' },
-    ];
+    public statusOptions: DropdownOption[] = [];
 
-    public locationOptions: DropdownOption[] = [
-        { label: 'All Locations', value: '' },
-        { label: 'DC-East', value: 'DC-East' },
-        { label: 'DC-West', value: 'DC-West' },
-        { label: 'DC-Europe', value: 'DC-Europe' },
-    ];
+    public locationOptions: DropdownOption[] = [];
 
     public selectedStatus = '';
 
@@ -64,12 +52,17 @@ export class ServerListComponent implements OnInit, OnDestroy {
 
     private searchSubscription!: Subscription;
 
+    private langSubscription!: Subscription;
+
     constructor(
         private serverService: ServerService,
         private router: Router,
         private dialog: Dialog,
-        private cdr: ChangeDetectorRef
-    ) {}
+        private cdr: ChangeDetectorRef,
+        private translate: TranslateService
+    ) {
+        this.buildTranslatedOptions();
+    }
 
     public ngOnInit(): void {
         this.searchSubscription = this.searchSubject.pipe(
@@ -81,11 +74,17 @@ export class ServerListComponent implements OnInit, OnDestroy {
             this.cdr.markForCheck();
         });
 
+        this.langSubscription = this.translate.onLangChange.subscribe(() => {
+            this.buildTranslatedOptions();
+            this.cdr.markForCheck();
+        });
+
         this.loadServers();
     }
 
     public ngOnDestroy(): void {
         this.searchSubscription.unsubscribe();
+        this.langSubscription.unsubscribe();
     }
 
     public loadServers(): void {
@@ -250,10 +249,29 @@ export class ServerListComponent implements OnInit, OnDestroy {
     }
 
     public formatUptime(hours: number): string {
-        if (hours === 0) return 'Offline';
+        if (hours === 0) return this.translate.instant('COMMON.OFFLINE');
         if (hours < 24) return `${hours}h`;
         const days = Math.floor(hours / 24);
         return `${days}d ${hours % 24}h`;
+    }
+
+    private buildTranslatedOptions(): void {
+        this.searchTypeOptions = [
+            { label: this.translate.instant('SERVER_LIST.SEARCH_TYPE.HOSTNAME'), value: 'hostname' },
+            { label: this.translate.instant('SERVER_LIST.SEARCH_TYPE.OS'), value: 'os' },
+        ];
+        this.statusOptions = [
+            { label: this.translate.instant('SERVER_LIST.ALL_STATUSES'), value: '' },
+            { label: this.translate.instant('COMMON.STATUSES.RUNNING'), value: 'running' },
+            { label: this.translate.instant('COMMON.STATUSES.STOPPED'), value: 'stopped' },
+            { label: this.translate.instant('COMMON.STATUSES.MAINTENANCE'), value: 'maintenance' },
+        ];
+        this.locationOptions = [
+            { label: this.translate.instant('SERVER_LIST.ALL_LOCATIONS'), value: '' },
+            { label: this.translate.instant('COMMON.LOCATIONS.DC_EAST'), value: 'DC-East' },
+            { label: this.translate.instant('COMMON.LOCATIONS.DC_WEST'), value: 'DC-West' },
+            { label: this.translate.instant('COMMON.LOCATIONS.DC_EUROPE'), value: 'DC-Europe' },
+        ];
     }
 
     public onAddServer(): void {
