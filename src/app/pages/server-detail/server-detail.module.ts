@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HighchartsChartModule } from 'highcharts-angular';
+import { TranslateModule } from '@ngx-translate/core';
 import { ButtonModule, InputModule, DropdownModule } from '@zhannam85/ui-kit';
 
 import { ServerDetailComponent } from './server-detail.component';
@@ -17,6 +18,7 @@ const routes: Routes = [{ path: '', component: ServerDetailComponent }];
         RouterModule.forChild(routes),
         ReactiveFormsModule,
         HighchartsChartModule,
+        TranslateModule,
         ButtonModule,
         InputModule,
         DropdownModule,

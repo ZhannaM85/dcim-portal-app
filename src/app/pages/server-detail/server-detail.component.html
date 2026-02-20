@@ -1,7 +1,7 @@
 <div class="server-detail" *ngIf="server">
     <div class="server-detail__top-bar">
         <kit-button
-            label="Back to Servers"
+            [label]="'SERVER_DETAIL.BACK' | translate"
             variant="secondary"
             size="small"
             (buttonClicked)="goBack()">
@@ -10,7 +10,7 @@
         <div class="server-detail__actions">
             <kit-button
                 *ngIf="!isEditMode"
-                label="Edit"
+                [label]="'COMMON.EDIT' | translate"
                 variant="primary"
                 size="small"
                 (buttonClicked)="toggleEditMode()">
@@ -18,7 +18,7 @@
 
             <kit-button
                 *ngIf="!isEditMode"
-                label="Restart"
+                [label]="'SERVER_DETAIL.RESTART' | translate"
                 variant="secondary"
                 size="small"
                 (buttonClicked)="onRestart()">
@@ -26,7 +26,7 @@
 
             <kit-button
                 *ngIf="!isEditMode"
-                label="Shut Down"
+                [label]="'SERVER_DETAIL.SHUT_DOWN' | translate"
                 variant="danger"
                 size="small"
                 (buttonClicked)="onShutDown()">
@@ -34,7 +34,7 @@
 
             <kit-button
                 *ngIf="isEditMode"
-                label="Cancel"
+                [label]="'COMMON.CANCEL' | translate"
                 variant="secondary"
                 size="small"
                 (buttonClicked)="cancelEdit()">
@@ -42,7 +42,7 @@
 
             <kit-button
                 *ngIf="isEditMode"
-                label="Save"
+                [label]="'COMMON.SAVE' | translate"
                 variant="primary"
                 size="small"
                 (buttonClicked)="saveChanges()"
@@ -63,47 +63,47 @@
     <!-- View Mode -->
     <div class="server-detail__cards" *ngIf="!isEditMode">
         <div class="info-card">
-            <h3 class="info-card__title">Network</h3>
+            <h3 class="info-card__title">{{ 'SERVER_DETAIL.SECTION.NETWORK' | translate }}</h3>
             <div class="info-card__rows">
                 <div class="info-card__row">
-                    <span class="info-card__label">IP Address</span>
+                    <span class="info-card__label">{{ 'COMMON.IP_ADDRESS' | translate }}</span>
                     <span class="info-card__value mono">{{ server.ipAddress }}</span>
                 </div>
                 <div class="info-card__row">
-                    <span class="info-card__label">Location</span>
+                    <span class="info-card__label">{{ 'COMMON.LOCATION' | translate }}</span>
                     <span class="info-card__value">{{ server.location }}</span>
                 </div>
             </div>
         </div>
 
         <div class="info-card">
-            <h3 class="info-card__title">System</h3>
+            <h3 class="info-card__title">{{ 'SERVER_DETAIL.SECTION.SYSTEM' | translate }}</h3>
             <div class="info-card__rows">
                 <div class="info-card__row">
-                    <span class="info-card__label">Operating System</span>
+                    <span class="info-card__label">{{ 'COMMON.OPERATING_SYSTEM' | translate }}</span>
                     <span class="info-card__value">{{ server.os }}</span>
                 </div>
                 <div class="info-card__row">
-                    <span class="info-card__label">Uptime</span>
+                    <span class="info-card__label">{{ 'COMMON.UPTIME' | translate }}</span>
                     <span class="info-card__value">{{ formatUptime(server.uptimeHours) }}</span>
                 </div>
             </div>
         </div>
 
         <div class="info-card">
-            <h3 class="info-card__title">Hardware</h3>
+            <h3 class="info-card__title">{{ 'SERVER_DETAIL.SECTION.HARDWARE' | translate }}</h3>
             <div class="info-card__rows">
                 <div class="info-card__row">
-                    <span class="info-card__label">CPU Cores</span>
+                    <span class="info-card__label">{{ 'COMMON.CPU_CORES' | translate }}</span>
                     <span class="info-card__value">{{ server.cpuCores }}</span>
                 </div>
                 <div class="info-card__row">
-                    <span class="info-card__label">RAM</span>
-                    <span class="info-card__value">{{ server.ramGb }} GB</span>
+                    <span class="info-card__label">{{ 'COMMON.RAM' | translate }}</span>
+                    <span class="info-card__value">{{ server.ramGb }} {{ 'COMMON.GB' | translate }}</span>
                 </div>
                 <div class="info-card__row">
-                    <span class="info-card__label">Storage</span>
-                    <span class="info-card__value">{{ server.storageGb }} GB</span>
+                    <span class="info-card__label">{{ 'COMMON.STORAGE' | translate }}</span>
+                    <span class="info-card__value">{{ server.storageGb }} {{ 'COMMON.GB' | translate }}</span>
                 </div>
             </div>
         </div>
@@ -119,32 +119,32 @@
     <!-- Edit Mode -->
     <form [formGroup]="serverForm" *ngIf="isEditMode" class="server-detail__edit-form">
         <div class="server-detail__edit-section">
-            <h3 class="server-detail__edit-title">Network</h3>
+            <h3 class="server-detail__edit-title">{{ 'SERVER_DETAIL.SECTION.NETWORK' | translate }}</h3>
             <div class="server-detail__edit-fields">
                 <kit-input
-                    label="Hostname"
+                    [label]="'COMMON.HOSTNAME' | translate"
                     formControlName="hostname"
-                    placeholder="e.g., web-prod-01"
+                    [placeholder]="'SERVER_DETAIL.PLACEHOLDER.HOSTNAME' | translate"
                     [required]="true"
                     [error]="serverForm.get('hostname')?.touched && serverForm.get('hostname')?.invalid ? getErrorMessage('hostname') : ''">
                 </kit-input>
 
                 <kit-input
-                    label="IP Address"
+                    [label]="'COMMON.IP_ADDRESS' | translate"
                     formControlName="ipAddress"
                     type="text"
-                    placeholder="e.g., 10.0.1.10"
+                    [placeholder]="'SERVER_DETAIL.PLACEHOLDER.IP_ADDRESS' | translate"
                     [required]="true"
                     [error]="serverForm.get('ipAddress')?.touched && serverForm.get('ipAddress')?.invalid ? getErrorMessage('ipAddress') : ''">
                 </kit-input>
 
                 <div class="server-detail__edit-field" role="group" aria-labelledby="location-label">
                     <span id="location-label" class="form-label">
-                        Location <span class="form-label__required">*</span>
+                        {{ 'COMMON.LOCATION' | translate }} <span class="form-label__required">*</span>
                     </span>
                     <kit-dropdown
                         [options]="locationOptions"
-                        placeholder="Select Location"
+                        [placeholder]="'SERVER_DETAIL.PLACEHOLDER.SELECT_LOCATION' | translate"
                         [selectedValue]="serverForm.get('location')?.value"
                         (selectionChange)="serverForm.get('location')?.setValue($event)">
                     </kit-dropdown>
@@ -156,12 +156,12 @@
         </div>
 
         <div class="server-detail__edit-section">
-            <h3 class="server-detail__edit-title">System</h3>
+            <h3 class="server-detail__edit-title">{{ 'SERVER_DETAIL.SECTION.SYSTEM' | translate }}</h3>
             <div class="server-detail__edit-fields">
                 <kit-input
-                    label="Operating System"
+                    [label]="'COMMON.OPERATING_SYSTEM' | translate"
                     formControlName="os"
-                    placeholder="e.g., Ubuntu 22.04 LTS"
+                    [placeholder]="'SERVER_DETAIL.PLACEHOLDER.OS' | translate"
                     [required]="true"
                     [error]="serverForm.get('os')?.touched && serverForm.get('os')?.invalid ? getErrorMessage('os') : ''">
                 </kit-input>
@@ -169,31 +169,31 @@
         </div>
 
         <div class="server-detail__edit-section">
-            <h3 class="server-detail__edit-title">Hardware</h3>
+            <h3 class="server-detail__edit-title">{{ 'SERVER_DETAIL.SECTION.HARDWARE' | translate }}</h3>
             <div class="server-detail__edit-fields server-detail__edit-fields--inline">
                 <kit-input
-                    label="CPU Cores"
+                    [label]="'COMMON.CPU_CORES' | translate"
                     formControlName="cpuCores"
                     type="number"
-                    placeholder="4"
+                    [placeholder]="'SERVER_DETAIL.PLACEHOLDER.CPU_CORES' | translate"
                     [required]="true"
                     [error]="serverForm.get('cpuCores')?.touched && serverForm.get('cpuCores')?.invalid ? getErrorMessage('cpuCores') : ''">
                 </kit-input>
 
                 <kit-input
-                    label="RAM (GB)"
+                    [label]="'COMMON.RAM_GB' | translate"
                     formControlName="ramGb"
                     type="number"
-                    placeholder="8"
+                    [placeholder]="'SERVER_DETAIL.PLACEHOLDER.RAM' | translate"
                     [required]="true"
                     [error]="serverForm.get('ramGb')?.touched && serverForm.get('ramGb')?.invalid ? getErrorMessage('ramGb') : ''">
                 </kit-input>
 
                 <kit-input
-                    label="Storage (GB)"
+                    [label]="'COMMON.STORAGE_GB' | translate"
                     formControlName="storageGb"
                     type="number"
-                    placeholder="100"
+                    [placeholder]="'SERVER_DETAIL.PLACEHOLDER.STORAGE' | translate"
                     [required]="true"
                     [error]="serverForm.get('storageGb')?.touched && serverForm.get('storageGb')?.invalid ? getErrorMessage('storageGb') : ''">
                 </kit-input>

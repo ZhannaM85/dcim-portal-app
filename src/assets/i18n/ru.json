@@ -1,0 +1,99 @@
+{
+  "APP": {
+    "TITLE": "DCIM Портал",
+    "SUBTITLE": "Управление инфраструктурой центра обработки данных"
+  },
+  "COMMON": {
+    "HOSTNAME": "Имя хоста",
+    "IP_ADDRESS": "IP-адрес",
+    "STATUS": "Статус",
+    "LOCATION": "Расположение",
+    "OS": "ОС",
+    "OPERATING_SYSTEM": "Операционная система",
+    "CPU": "ЦП",
+    "CPU_CORES": "Ядра ЦП",
+    "RAM": "ОЗУ",
+    "RAM_GB": "ОЗУ (ГБ)",
+    "STORAGE": "Хранилище",
+    "STORAGE_GB": "Хранилище (ГБ)",
+    "UPTIME": "Время работы",
+    "OFFLINE": "Не в сети",
+    "CANCEL": "Отмена",
+    "SAVE": "Сохранить",
+    "EDIT": "Редактировать",
+    "VIEW": "Просмотр",
+    "CORES": "ядер",
+    "GB": "ГБ",
+    "STATUSES": {
+      "RUNNING": "Работает",
+      "STOPPED": "Остановлен",
+      "MAINTENANCE": "Обслуживание"
+    },
+    "LOCATIONS": {
+      "DC_EAST": "ЦОД-Восток",
+      "DC_WEST": "ЦОД-Запад",
+      "DC_EUROPE": "ЦОД-Европа"
+    },
+    "VALIDATION": {
+      "REQUIRED": "Поле {{field}} обязательно для заполнения",
+      "MIN_LENGTH": "{{field}} должно содержать не менее {{length}} символов",
+      "INVALID_IP": "Неверный формат IP-адреса",
+      "MIN_VALUE": "Значение должно быть не менее {{min}}",
+      "MAX_VALUE": "Значение должно быть не более {{max}}"
+    }
+  },
+  "SERVER_LIST": {
+    "TITLE": "Серверы",
+    "COUNT": "{{filtered}} из {{total}} серверов",
+    "SEARCH_PLACEHOLDER": "Поиск серверов (мин. 3 символа)...",
+    "ALL_FIELDS": "Все поля",
+    "ALL_STATUSES": "Все статусы",
+    "ALL_LOCATIONS": "Все расположения",
+    "ADD_SERVER": "Добавить сервер",
+    "RESTART_SELECTED": "Перезапустить выбранные",
+    "DELETE_SELECTED": "Удалить выбранные",
+    "SEARCH_TYPE": {
+      "HOSTNAME": "Имя хоста",
+      "OS": "Операционная система"
+    },
+    "EMPTY": {
+      "NO_SEARCH_RESULTS": "Серверы не найдены по запросу \"{{term}}\".",
+      "TRY_DIFFERENT": "Попробуйте другой запрос или",
+      "CLEAR_FILTERS_LINK": "сбросьте все фильтры",
+      "NO_FILTER_MATCH": "Нет серверов, соответствующих текущим фильтрам.",
+      "CLEAR_ALL_FILTERS": "Сбросить все фильтры"
+    }
+  },
+  "SERVER_DETAIL": {
+    "BACK": "Назад к серверам",
+    "RESTART": "Перезапустить",
+    "SHUT_DOWN": "Выключить",
+    "SECTION": {
+      "NETWORK": "Сеть",
+      "SYSTEM": "Система",
+      "HARDWARE": "Оборудование"
+    },
+    "PLACEHOLDER": {
+      "HOSTNAME": "напр., web-prod-01",
+      "IP_ADDRESS": "напр., 10.0.1.10",
+      "SELECT_LOCATION": "Выберите расположение",
+      "OS": "напр., Ubuntu 22.04 LTS",
+      "CPU_CORES": "4",
+      "RAM": "8",
+      "STORAGE": "100"
+    }
+  },
+  "ADD_SERVER": {
+    "TITLE": "Добавить новый сервер",
+    "CLOSE_DIALOG": "Закрыть диалог",
+    "SUBMIT": "Добавить сервер",
+    "SELECT_STATUS": "Выберите статус"
+  },
+  "CHART": {
+    "CPU_USAGE_TITLE": "Использование ЦП за время",
+    "TIME": "Время",
+    "CPU_USAGE_PERCENT": "Использование ЦП (%)",
+    "CPU_USAGE_LABEL": "Использование ЦП",
+    "CPU_USAGE_TOOLTIP": "Использование ЦП: {{value}}%"
+  }
+}

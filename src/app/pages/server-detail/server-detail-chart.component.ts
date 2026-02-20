@@ -1,4 +1,6 @@
-import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 import * as Highcharts from 'highcharts';
 
 @Component({
@@ -7,7 +9,7 @@ import * as Highcharts from 'highcharts';
     templateUrl: './server-detail-chart.component.html',
     styleUrls: ['./server-detail-chart.component.scss'],
 })
-export class ServerDetailChartComponent implements OnInit, OnChanges {
+export class ServerDetailChartComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public serverId: string | undefined;
 
     @Input() public uptimeHours = 0;
@@ -16,8 +18,15 @@ export class ServerDetailChartComponent implements OnInit, OnChanges {
 
     public chartOptions: Highcharts.Options = {};
 
+    private langSubscription!: Subscription;
+
+    constructor(private translate: TranslateService) {}
+
     public ngOnInit(): void {
         this.generateChartData();
+        this.langSubscription = this.translate.onLangChange.subscribe(() => {
+            this.generateChartData();
+        });
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -26,22 +35,25 @@ export class ServerDetailChartComponent implements OnInit, OnChanges {
         }
     }
 
+    public ngOnDestroy(): void {
+        this.langSubscription.unsubscribe();
+    }
+
     private generateChartData(): void {
-        // Generate mock CPU usage data for the last 24 hours
         const dataPoints: [number, number][] = [];
         const now = Date.now();
         const hoursToShow = Math.min(24, Math.max(1, Math.floor(this.uptimeHours)));
 
-        // Generate hourly data points
         for (let i = hoursToShow; i >= 0; i--) {
             const timestamp = now - (i * 60 * 60 * 1000);
-            // Generate realistic CPU usage (20-80% range with some variation)
-            // Higher variation for servers with more uptime
             const baseUsage = 40 + (Math.sin(i / 3) * 15);
             const variation = (Math.random() - 0.5) * 20;
             const cpuUsage = Math.max(10, Math.min(90, baseUsage + variation));
             dataPoints.push([timestamp, Math.round(cpuUsage * 10) / 10]);
         }
+
+        const cpuUsageLabel = this.translate.instant('CHART.CPU_USAGE_LABEL');
+        const tooltipTemplate = this.translate.instant('CHART.CPU_USAGE_TOOLTIP', { value: '{y}' });
 
         this.chartOptions = {
             chart: {
@@ -50,7 +62,7 @@ export class ServerDetailChartComponent implements OnInit, OnChanges {
                 height: 300,
             },
             title: {
-                text: 'CPU Usage Over Time',
+                text: this.translate.instant('CHART.CPU_USAGE_TITLE'),
                 style: {
                     fontSize: '16px',
                     fontWeight: '600',
@@ -59,7 +71,7 @@ export class ServerDetailChartComponent implements OnInit, OnChanges {
             xAxis: {
                 type: 'datetime',
                 title: {
-                    text: 'Time',
+                    text: this.translate.instant('CHART.TIME'),
                 },
                 labels: {
                     format: '{value:%H:%M}',
@@ -67,7 +79,7 @@ export class ServerDetailChartComponent implements OnInit, OnChanges {
             },
             yAxis: {
                 title: {
-                    text: 'CPU Usage (%)',
+                    text: this.translate.instant('CHART.CPU_USAGE_PERCENT'),
                 },
                 min: 0,
                 max: 100,
@@ -78,12 +90,12 @@ export class ServerDetailChartComponent implements OnInit, OnChanges {
             tooltip: {
                 formatter: function () {
                     const date = new Date(this.x as number);
-                    return `<b>${date.toLocaleString()}</b><br/>CPU Usage: ${this.y}%`;
+                    return `<b>${date.toLocaleString()}</b><br/>${tooltipTemplate.replace('{y}', String(this.y))}`;
                 },
             },
             series: [
                 {
-                    name: 'CPU Usage',
+                    name: cpuUsageLabel,
                     type: 'area',
                     data: dataPoints,
                     color: '#4a90e2',
