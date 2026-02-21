@@ -89,14 +89,21 @@
     "SUBMIT": "Добавить сервер",
     "SELECT_STATUS": "Выберите статус"
   },
+  "CONFIRM_DELETE": {
+    "TITLE": "Подтверждение удаления",
+    "MESSAGE": "Вы уверены, что хотите удалить {{count}} сервер(ов)? Это действие можно отменить.",
+    "CONFIRM": "Удалить"
+  },
   "NOTIFICATIONS": {
     "SERVER_ADDED": "Сервер \"{{hostname}}\" успешно добавлен",
     "SERVERS_DELETED": "{{count}} сервер(ов) успешно удалено",
+    "SERVERS_RESTORED": "{{count}} сервер(ов) успешно восстановлено",
     "SERVERS_RESTARTED": "{{count}} сервер(ов) успешно перезапущено",
     "SERVER_RESTARTED": "Сервер \"{{hostname}}\" перезапущен",
     "SERVER_SHUT_DOWN": "Сервер \"{{hostname}}\" выключен",
     "SERVER_UPDATED": "Сервер \"{{hostname}}\" успешно обновлён",
-    "LANGUAGE_CHANGED": "Выбор языка применён"
+    "LANGUAGE_CHANGED": "Выбор языка применён",
+    "UNDO": "Отменить"
   },
   "CHART": {
     "CPU_USAGE_TITLE": "Использование ЦП за время",

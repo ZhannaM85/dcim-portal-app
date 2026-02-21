@@ -89,14 +89,21 @@
     "SUBMIT": "Ajouter le serveur",
     "SELECT_STATUS": "Sélectionner le statut"
   },
+  "CONFIRM_DELETE": {
+    "TITLE": "Confirmer la suppression",
+    "MESSAGE": "Êtes-vous sûr de vouloir supprimer {{count}} serveur(s) ? Cette action peut être annulée.",
+    "CONFIRM": "Supprimer"
+  },
   "NOTIFICATIONS": {
     "SERVER_ADDED": "Le serveur \"{{hostname}}\" a été ajouté avec succès",
     "SERVERS_DELETED": "{{count}} serveur(s) supprimé(s) avec succès",
+    "SERVERS_RESTORED": "{{count}} serveur(s) restauré(s) avec succès",
     "SERVERS_RESTARTED": "{{count}} serveur(s) redémarré(s) avec succès",
     "SERVER_RESTARTED": "Le serveur \"{{hostname}}\" a été redémarré",
     "SERVER_SHUT_DOWN": "Le serveur \"{{hostname}}\" a été arrêté",
     "SERVER_UPDATED": "Le serveur \"{{hostname}}\" a été mis à jour avec succès",
-    "LANGUAGE_CHANGED": "La sélection de la langue a été appliquée"
+    "LANGUAGE_CHANGED": "La sélection de la langue a été appliquée",
+    "UNDO": "Annuler"
   },
   "CHART": {
     "CPU_USAGE_TITLE": "Utilisation du CPU dans le temps",

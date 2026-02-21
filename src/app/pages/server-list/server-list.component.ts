@@ -8,6 +8,7 @@ import { DropdownOption, NotificationService } from '@zhannam85/ui-kit';
 import { Server } from '../../models/server.model';
 import { ServerService } from '../../services/server.service';
 import { AddServerDialogComponent } from './add-server-dialog/add-server-dialog.component';
+import { ConfirmDialogComponent, ConfirmDialogData } from './confirm-dialog/confirm-dialog.component';
 
 type SortColumn = 'hostname' | 'ipAddress' | 'status' | 'location' | 'os' | 'cpuCores' | 'ramGb' | 'storageGb' | 'uptimeHours';
 type SortDirection = 'asc' | 'desc';
@@ -233,12 +234,46 @@ export class ServerListComponent implements OnInit, OnDestroy {
     public onDeleteSelected(): void {
         const ids = Array.from(this.selectedIds);
         const count = ids.length;
-        this.serverService.deleteByIds(ids);
-        this.selectedIds.clear();
-        this.loadServers();
-        this.notificationService.success(
-            this.translate.instant('NOTIFICATIONS.SERVERS_DELETED', { count })
-        );
+        const deletedServers = this.servers.filter((s) => ids.includes(s.id));
+
+        const data: ConfirmDialogData = {
+            title: this.translate.instant('CONFIRM_DELETE.TITLE'),
+            message: this.translate.instant('CONFIRM_DELETE.MESSAGE', { count }),
+            confirmLabel: this.translate.instant('CONFIRM_DELETE.CONFIRM'),
+            cancelLabel: this.translate.instant('COMMON.CANCEL'),
+        };
+
+        const dialogRef = this.dialog.open<boolean>(ConfirmDialogComponent, {
+            width: '460px',
+            maxWidth: '90vw',
+            hasBackdrop: true,
+            backdropClass: 'cdk-dialog-backdrop',
+            panelClass: 'confirm-dialog-panel',
+            data,
+        });
+
+        dialogRef.closed.subscribe((confirmed) => {
+            if (confirmed) {
+                this.serverService.deleteByIds(ids);
+                this.selectedIds.clear();
+                this.loadServers();
+                this.cdr.detectChanges();
+                this.notificationService.warning(
+                    this.translate.instant('NOTIFICATIONS.SERVERS_DELETED', { count }),
+                    {
+                        actionLabel: this.translate.instant('NOTIFICATIONS.UNDO'),
+                        actionCallback: () => {
+                            this.serverService.restoreServers(deletedServers);
+                            this.loadServers();
+                            this.cdr.detectChanges();
+                            this.notificationService.success(
+                                this.translate.instant('NOTIFICATIONS.SERVERS_RESTORED', { count })
+                            );
+                        },
+                    }
+                );
+            }
+        });
     }
 
     public onRestartSelected(): void {
