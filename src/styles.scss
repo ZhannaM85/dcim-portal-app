@@ -68,3 +68,10 @@ a {
     min-height: 0;
     max-height: 100%;
 }
+
+.confirm-dialog-panel {
+    padding: 24px !important;
+    background: #fff !important;
+    border-radius: 8px !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2) !important;
+}

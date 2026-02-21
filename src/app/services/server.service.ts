@@ -19,6 +19,10 @@ export class ServerService {
         this.servers = this.servers.filter((s) => !ids.includes(s.id));
     }
 
+    public restoreServers(servers: Server[]): void {
+        this.servers.push(...servers);
+    }
+
     public create(serverData: Partial<Server>): Server {
         // Generate unique ID
         const maxId = this.servers.reduce((max, s) => {

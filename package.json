@@ -23,7 +23,7 @@
     "@angular/router": "^21.0.0",
     "@ngx-translate/core": "^17.0.0",
     "@ngx-translate/http-loader": "^17.0.0",
-    "@zhannam85/ui-kit": "^0.1.8",
+    "@zhannam85/ui-kit": "^0.1.10",
     "highcharts": "^11.0.0",
     "highcharts-angular": "^3.0.0",
     "tslib": "^2.3.0",

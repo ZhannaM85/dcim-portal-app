@@ -89,6 +89,22 @@
     "SUBMIT": "Server hinzufügen",
     "SELECT_STATUS": "Status auswählen"
   },
+  "CONFIRM_DELETE": {
+    "TITLE": "Löschen bestätigen",
+    "MESSAGE": "Sind Sie sicher, dass Sie {{count}} Server löschen möchten? Diese Aktion kann rückgängig gemacht werden.",
+    "CONFIRM": "Löschen"
+  },
+  "NOTIFICATIONS": {
+    "SERVER_ADDED": "Server \"{{hostname}}\" wurde erfolgreich hinzugefügt",
+    "SERVERS_DELETED": "{{count}} Server erfolgreich gelöscht",
+    "SERVERS_RESTORED": "{{count}} Server erfolgreich wiederhergestellt",
+    "SERVERS_RESTARTED": "{{count}} Server erfolgreich neu gestartet",
+    "SERVER_RESTARTED": "Server \"{{hostname}}\" wurde neu gestartet",
+    "SERVER_SHUT_DOWN": "Server \"{{hostname}}\" wurde heruntergefahren",
+    "SERVER_UPDATED": "Server \"{{hostname}}\" wurde erfolgreich aktualisiert",
+    "LANGUAGE_CHANGED": "Sprachauswahl wurde angewendet",
+    "UNDO": "Rückgängig"
+  },
   "CHART": {
     "CPU_USAGE_TITLE": "CPU-Auslastung im Zeitverlauf",
     "TIME": "Zeit",

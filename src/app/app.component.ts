@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { DropdownOption } from '@zhannam85/ui-kit';
+import { DropdownOption, NotificationService } from '@zhannam85/ui-kit';
 
 @Component({
     standalone: false,
@@ -19,7 +19,10 @@ export class AppComponent {
 
     public currentLang: string;
 
-    constructor(private translate: TranslateService) {
+    constructor(
+        private translate: TranslateService,
+        private notificationService: NotificationService,
+    ) {
         this.translate.addLangs(['en', 'ru', 'de', 'fr', 'nl']);
         this.translate.setDefaultLang('en');
 
@@ -30,7 +33,11 @@ export class AppComponent {
 
     public switchLanguage(lang: string): void {
         this.currentLang = lang;
-        this.translate.use(lang);
+        this.translate.use(lang).subscribe(() => {
+            this.notificationService.success(
+                this.translate.instant('NOTIFICATIONS.LANGUAGE_CHANGED')
+            );
+        });
         localStorage.setItem('app-lang', lang);
     }
 }
