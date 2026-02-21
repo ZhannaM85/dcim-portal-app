@@ -89,6 +89,15 @@
     "SUBMIT": "Server toevoegen",
     "SELECT_STATUS": "Selecteer status"
   },
+  "NOTIFICATIONS": {
+    "SERVER_ADDED": "Server \"{{hostname}}\" is succesvol toegevoegd",
+    "SERVERS_DELETED": "{{count}} server(s) succesvol verwijderd",
+    "SERVERS_RESTARTED": "{{count}} server(s) succesvol herstart",
+    "SERVER_RESTARTED": "Server \"{{hostname}}\" is herstart",
+    "SERVER_SHUT_DOWN": "Server \"{{hostname}}\" is afgesloten",
+    "SERVER_UPDATED": "Server \"{{hostname}}\" is succesvol bijgewerkt",
+    "LANGUAGE_CHANGED": "Taalselectie is toegepast"
+  },
   "CHART": {
     "CPU_USAGE_TITLE": "CPU-gebruik in de tijd",
     "TIME": "Tijd",

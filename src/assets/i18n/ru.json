@@ -89,6 +89,15 @@
     "SUBMIT": "Добавить сервер",
     "SELECT_STATUS": "Выберите статус"
   },
+  "NOTIFICATIONS": {
+    "SERVER_ADDED": "Сервер \"{{hostname}}\" успешно добавлен",
+    "SERVERS_DELETED": "{{count}} сервер(ов) успешно удалено",
+    "SERVERS_RESTARTED": "{{count}} сервер(ов) успешно перезапущено",
+    "SERVER_RESTARTED": "Сервер \"{{hostname}}\" перезапущен",
+    "SERVER_SHUT_DOWN": "Сервер \"{{hostname}}\" выключен",
+    "SERVER_UPDATED": "Сервер \"{{hostname}}\" успешно обновлён",
+    "LANGUAGE_CHANGED": "Выбор языка применён"
+  },
   "CHART": {
     "CPU_USAGE_TITLE": "Использование ЦП за время",
     "TIME": "Время",

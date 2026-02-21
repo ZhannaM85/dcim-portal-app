@@ -89,6 +89,15 @@
     "SUBMIT": "Add Server",
     "SELECT_STATUS": "Select Status"
   },
+  "NOTIFICATIONS": {
+    "SERVER_ADDED": "Server \"{{hostname}}\" was successfully added",
+    "SERVERS_DELETED": "{{count}} server(s) deleted successfully",
+    "SERVERS_RESTARTED": "{{count}} server(s) restarted successfully",
+    "SERVER_RESTARTED": "Server \"{{hostname}}\" was restarted",
+    "SERVER_SHUT_DOWN": "Server \"{{hostname}}\" was shut down",
+    "SERVER_UPDATED": "Server \"{{hostname}}\" was updated successfully",
+    "LANGUAGE_CHANGED": "Language selection was applied"
+  },
   "CHART": {
     "CPU_USAGE_TITLE": "CPU Usage Over Time",
     "TIME": "Time",

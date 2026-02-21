@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { Server, ServerLocation } from '../../models/server.model';
 import { ServerService } from '../../services/server.service';
-import { DropdownOption } from '@zhannam85/ui-kit';
+import { DropdownOption, NotificationService } from '@zhannam85/ui-kit';
 
 @Component({
     standalone: false,
@@ -31,7 +31,8 @@ export class ServerDetailComponent implements OnInit, OnDestroy {
         private router: Router,
         private serverService: ServerService,
         private fb: FormBuilder,
-        private translate: TranslateService
+        private translate: TranslateService,
+        private notificationService: NotificationService,
     ) {
         this.buildTranslatedOptions();
         this.serverForm = this.fb.group({
@@ -88,6 +89,9 @@ export class ServerDetailComponent implements OnInit, OnDestroy {
         if (this.server) {
             this.server.status = 'running';
             this.server.uptimeHours = 0;
+            this.notificationService.success(
+                this.translate.instant('NOTIFICATIONS.SERVER_RESTARTED', { hostname: this.server.hostname })
+            );
         }
     }
 
@@ -95,6 +99,9 @@ export class ServerDetailComponent implements OnInit, OnDestroy {
         if (this.server) {
             this.server.status = 'stopped';
             this.server.uptimeHours = 0;
+            this.notificationService.warning(
+                this.translate.instant('NOTIFICATIONS.SERVER_SHUT_DOWN', { hostname: this.server.hostname })
+            );
         }
     }
 
@@ -124,9 +131,11 @@ export class ServerDetailComponent implements OnInit, OnDestroy {
                 ramGb: parseInt(formValue.ramGb, 10),
                 storageGb: parseInt(formValue.storageGb, 10),
             });
-            // Reload server to get updated data
             this.server = this.serverService.getById(this.server.id);
             this.isEditMode = false;
+            this.notificationService.success(
+                this.translate.instant('NOTIFICATIONS.SERVER_UPDATED', { hostname: this.server?.hostname })
+            );
         } else {
             // Mark all fields as touched to show validation errors
             Object.keys(this.serverForm.controls).forEach((key) => {

@@ -4,7 +4,7 @@ import { Dialog } from '@angular/cdk/dialog';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
-import { DropdownOption } from '@zhannam85/ui-kit';
+import { DropdownOption, NotificationService } from '@zhannam85/ui-kit';
 import { Server } from '../../models/server.model';
 import { ServerService } from '../../services/server.service';
 import { AddServerDialogComponent } from './add-server-dialog/add-server-dialog.component';
@@ -59,7 +59,8 @@ export class ServerListComponent implements OnInit, OnDestroy {
         private router: Router,
         private dialog: Dialog,
         private cdr: ChangeDetectorRef,
-        private translate: TranslateService
+        private translate: TranslateService,
+        private notificationService: NotificationService,
     ) {
         this.buildTranslatedOptions();
     }
@@ -231,13 +232,17 @@ export class ServerListComponent implements OnInit, OnDestroy {
 
     public onDeleteSelected(): void {
         const ids = Array.from(this.selectedIds);
+        const count = ids.length;
         this.serverService.deleteByIds(ids);
         this.selectedIds.clear();
         this.loadServers();
+        this.notificationService.success(
+            this.translate.instant('NOTIFICATIONS.SERVERS_DELETED', { count })
+        );
     }
 
     public onRestartSelected(): void {
-        // Mock restart: just toggle status to running
+        const count = this.selectedIds.size;
         this.selectedIds.forEach((id) => {
             const server = this.servers.find((s) => s.id === id);
             if (server) {
@@ -246,6 +251,9 @@ export class ServerListComponent implements OnInit, OnDestroy {
             }
         });
         this.selectedIds.clear();
+        this.notificationService.success(
+            this.translate.instant('NOTIFICATIONS.SERVERS_RESTARTED', { count })
+        );
     }
 
     public formatUptime(hours: number): string {
@@ -286,9 +294,11 @@ export class ServerListComponent implements OnInit, OnDestroy {
 
         dialogRef.closed.subscribe((result) => {
             if (result) {
-                // Server was created, refresh the list
                 this.loadServers();
                 this.cdr.detectChanges();
+                this.notificationService.success(
+                    this.translate.instant('NOTIFICATIONS.SERVER_ADDED', { hostname: result.hostname })
+                );
             }
         });
     }
