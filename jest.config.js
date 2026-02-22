@@ -16,6 +16,6 @@ module.exports = {
     ]
   },
   moduleNameMapper: {
-    '@zhannam85/ui-kit': '<rootDir>/node_modules/@zhannam85/ui-kit'
+    '@zhannam85/ui-kit': '<rootDir>/node_modules/@zhannam85/ui-kit/fesm2022/zhannam85-ui-kit.mjs'
   }
 };

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { CommonModule } from '@angular/common';
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, Pipe, PipeTransform, NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router } from '@angular/router';
 import { Dialog } from '@angular/cdk/dialog';
 import { TranslateService } from '@ngx-translate/core';
@@ -49,6 +49,16 @@ class MockSortAsc { @Input() size: unknown; }
 @Component({ selector: 'kit-icon-sort-desc', template: '', standalone: false })
 class MockSortDesc { @Input() size: unknown; }
 
+@Pipe({ name: 'translate', standalone: false })
+class MockTranslatePipe implements PipeTransform {
+    transform(value: string): string { return value; }
+}
+
+@Pipe({ name: 'highlight', standalone: false })
+class MockHighlightPipe implements PipeTransform {
+    transform(value: string): string { return value; }
+}
+
 describe('ServerListComponent', () => {
     let component: ServerListComponent;
     let fixture: ComponentFixture<ServerListComponent>;
@@ -69,7 +79,10 @@ describe('ServerListComponent', () => {
 
         const mockTranslate = {
             instant: jest.fn((key: string) => key),
+            get: jest.fn((key: string) => of(key)),
             onLangChange: langChangeSubject.asObservable(),
+            onTranslationChange: new Subject(),
+            onDefaultLangChange: new Subject(),
         };
 
         await TestBed.configureTestingModule({
@@ -81,8 +94,11 @@ describe('ServerListComponent', () => {
                 MockInputComponent,
                 MockSortAsc,
                 MockSortDesc,
+                MockTranslatePipe,
+                MockHighlightPipe,
             ],
             imports: [CommonModule],
+            schemas: [NO_ERRORS_SCHEMA],
             providers: [
                 { provide: ServerService, useValue: mockServerService },
                 { provide: Router, useValue: mockRouter },
@@ -119,14 +135,12 @@ describe('ServerListComponent', () => {
     });
 
     it('should sort by hostname', () => {
-        component.sort('hostname');
         const hostnames = component.filteredServers.map(s => s.hostname);
         const sorted = [...hostnames].sort();
         expect(hostnames).toEqual(sorted);
     });
 
     it('should toggle sort direction', () => {
-        component.sort('hostname');
         expect(component.sortDirection).toBe('asc');
 
         component.sort('hostname');
@@ -134,7 +148,6 @@ describe('ServerListComponent', () => {
     });
 
     it('should clear sort on third click', () => {
-        component.sort('hostname');
         component.sort('hostname');
         component.sort('hostname');
         expect(component.sortColumn).toBeNull();

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, Input } from '@angular/core';
-import { Subject } from 'rxjs';
+import { of, Subject } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { ServerDetailChartComponent } from './server-detail-chart.component';
 
@@ -25,7 +25,10 @@ describe('ServerDetailChartComponent', () => {
                     provide: TranslateService,
                     useValue: {
                         instant: jest.fn((key: string) => key),
+                        get: jest.fn((key: string) => of(key)),
                         onLangChange: langChangeSubject.asObservable(),
+                        onTranslationChange: new Subject(),
+                        onDefaultLangChange: new Subject(),
                     },
                 },
             ],

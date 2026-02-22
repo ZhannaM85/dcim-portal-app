@@ -1,8 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, Pipe, PipeTransform, forwardRef } from '@angular/core';
 import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { of, Subject } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '@zhannam85/ui-kit';
@@ -13,14 +14,26 @@ import { Server } from '../../models/server.model';
 @Component({ selector: 'kit-button', template: '', standalone: false })
 class MockButton { @Input() label = ''; @Input() variant = ''; @Input() size = ''; @Input() disabled = false; @Output() buttonClicked = new EventEmitter(); }
 
-@Component({ selector: 'kit-input', template: '', standalone: false })
-class MockInput { @Input() label = ''; @Input() placeholder = ''; @Input() type = ''; @Input() error = ''; @Input() required = false; @Output() valueChange = new EventEmitter(); }
+@Component({
+    selector: 'kit-input', template: '', standalone: false,
+    providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => MockInput), multi: true }]
+})
+class MockInput implements ControlValueAccessor {
+    @Input() label = ''; @Input() placeholder = ''; @Input() type = ''; @Input() error = ''; @Input() required = false;
+    @Output() valueChange = new EventEmitter();
+    writeValue(): void {} registerOnChange(): void {} registerOnTouched(): void {}
+}
 
 @Component({ selector: 'kit-dropdown', template: '', standalone: false })
 class MockDropdown { @Input() options: unknown; @Input() selectedValue: unknown; @Input() placeholder = ''; @Output() selectionChange = new EventEmitter(); }
 
 @Component({ selector: 'app-server-detail-chart', template: '', standalone: false })
 class MockChart { @Input() serverId: unknown; @Input() uptimeHours = 0; }
+
+@Pipe({ name: 'translate', standalone: false })
+class MockTranslatePipe implements PipeTransform {
+    transform(value: string): string { return value; }
+}
 
 const MOCK_SERVER: Server = {
     id: 'srv-001', hostname: 'web-prod-01', ipAddress: '10.0.1.10',
@@ -44,7 +57,7 @@ describe('ServerDetailComponent', () => {
         mockRouter = { navigate: jest.fn() };
 
         await TestBed.configureTestingModule({
-            declarations: [ServerDetailComponent, MockButton, MockInput, MockDropdown, MockChart],
+            declarations: [ServerDetailComponent, MockButton, MockInput, MockDropdown, MockChart, MockTranslatePipe],
             imports: [CommonModule, ReactiveFormsModule],
             providers: [
                 { provide: ServerService, useValue: mockServerService },
@@ -53,7 +66,7 @@ describe('ServerDetailComponent', () => {
                     provide: ActivatedRoute,
                     useValue: { snapshot: { paramMap: convertToParamMap({ id: 'srv-001' }) } },
                 },
-                { provide: TranslateService, useValue: { instant: jest.fn((key: string) => key), onLangChange: langChangeSubject.asObservable() } },
+                { provide: TranslateService, useValue: { instant: jest.fn((key: string) => key), get: jest.fn((key: string) => of(key)), onLangChange: langChangeSubject.asObservable(), onTranslationChange: new Subject(), onDefaultLangChange: new Subject() } },
                 { provide: NotificationService, useValue: { success: jest.fn(), warning: jest.fn() } },
             ],
         }).compileComponents();

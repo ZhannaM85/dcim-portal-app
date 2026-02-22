@@ -1,17 +1,31 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, Pipe, PipeTransform, NO_ERRORS_SCHEMA, forwardRef } from '@angular/core';
 import { DialogRef } from '@angular/cdk/dialog';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
+import { of, Subject } from 'rxjs';
 import { AddServerDialogComponent } from './add-server-dialog.component';
 import { ServerService } from '../../../services/server.service';
+
+@Pipe({ name: 'translate', standalone: false })
+class MockTranslatePipe implements PipeTransform {
+    transform(value: string): string { return value; }
+}
 
 @Component({ selector: 'kit-button', template: '', standalone: false })
 class MockButton { @Input() label = ''; @Input() variant = ''; @Input() type = ''; @Input() disabled = false; @Output() buttonClicked = new EventEmitter(); }
 
-@Component({ selector: 'kit-input', template: '', standalone: false })
-class MockInput { @Input() label = ''; @Input() placeholder = ''; @Input() type = ''; @Input() error = ''; @Input() required = false; @Output() valueChange = new EventEmitter(); }
+@Component({
+    selector: 'kit-input', template: '', standalone: false,
+    providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => MockInput), multi: true }]
+})
+class MockInput implements ControlValueAccessor {
+    @Input() label = ''; @Input() placeholder = ''; @Input() type = ''; @Input() error = ''; @Input() required = false;
+    @Output() valueChange = new EventEmitter();
+    writeValue(): void {} registerOnChange(): void {} registerOnTouched(): void {}
+}
 
 @Component({ selector: 'kit-dropdown', template: '', standalone: false })
 class MockDropdown { @Input() options: unknown; @Input() selectedValue: unknown; @Input() placeholder = ''; @Output() selectionChange = new EventEmitter(); }
@@ -33,12 +47,13 @@ describe('AddServerDialogComponent', () => {
         };
 
         await TestBed.configureTestingModule({
-            declarations: [AddServerDialogComponent, MockButton, MockInput, MockDropdown],
+            declarations: [AddServerDialogComponent, MockButton, MockInput, MockDropdown, MockTranslatePipe],
             imports: [CommonModule, ReactiveFormsModule],
+            schemas: [NO_ERRORS_SCHEMA],
             providers: [
                 { provide: DialogRef, useValue: mockDialogRef },
                 { provide: ServerService, useValue: mockServerService },
-                { provide: TranslateService, useValue: { instant: jest.fn((key: string) => key) } },
+                { provide: TranslateService, useValue: { instant: jest.fn((key: string) => key), get: jest.fn((key: string) => of(key)), onLangChange: new Subject(), onTranslationChange: new Subject(), onDefaultLangChange: new Subject() } },
             ],
         }).compileComponents();
 

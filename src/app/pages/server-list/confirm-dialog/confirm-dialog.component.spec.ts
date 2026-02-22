@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, NO_ERRORS_SCHEMA } from '@angular/core';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { ConfirmDialogComponent, ConfirmDialogData } from './confirm-dialog.component';
 
@@ -23,6 +23,7 @@ describe('ConfirmDialogComponent', () => {
 
         await TestBed.configureTestingModule({
             declarations: [ConfirmDialogComponent, MockButton],
+            schemas: [NO_ERRORS_SCHEMA],
             providers: [
                 { provide: DialogRef, useValue: mockDialogRef },
                 { provide: DIALOG_DATA, useValue: dialogData },
