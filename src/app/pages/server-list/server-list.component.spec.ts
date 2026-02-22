@@ -269,15 +269,22 @@ describe('ServerListComponent', () => {
         expect(component.filteredServers.every(s => s.location === 'DC-West')).toBe(true);
     });
 
-    it('should prune selected IDs when filtering hides them', () => {
+    it('should remove selected ID when server is hidden by filter', () => {
         component.toggleServerSelection('srv-001', true);
         expect(component.isSelected('srv-001')).toBe(true);
 
         component.onStatusFilterChange('stopped');
-        const srv001Visible = component.filteredServers.some(s => s.id === 'srv-001');
-        if (!srv001Visible) {
-            expect(component.isSelected('srv-001')).toBe(false);
-        }
+        expect(component.filteredServers.some(s => s.id === 'srv-001')).toBe(false);
+        expect(component.isSelected('srv-001')).toBe(false);
+    });
+
+    it('should keep selected ID when server remains visible after filter', () => {
+        component.toggleServerSelection('srv-001', true);
+        expect(component.isSelected('srv-001')).toBe(true);
+
+        component.onStatusFilterChange('running');
+        expect(component.filteredServers.some(s => s.id === 'srv-001')).toBe(true);
+        expect(component.isSelected('srv-001')).toBe(true);
     });
 
     it('should report allSelected correctly', () => {
