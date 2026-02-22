@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { highlightText } from '../../utils/utils';
 
 @Pipe({
     name: 'highlight',
@@ -9,14 +10,10 @@ export class HighlightPipe implements PipeTransform {
     constructor(private sanitizer: DomSanitizer) {}
 
     public transform(text: string, search: string): SafeHtml {
-        if (!search || search.length < 3 || !text) {
+        const result = highlightText(text, search);
+        if (result === text) {
             return text;
         }
-
-        const escaped = search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        const regex = new RegExp(`(${escaped})`, 'gi');
-        const highlighted = text.replace(regex, '<mark>$1</mark>');
-
-        return this.sanitizer.bypassSecurityTrustHtml(highlighted);
+        return this.sanitizer.bypassSecurityTrustHtml(result);
     }
 }
