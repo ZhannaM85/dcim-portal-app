@@ -132,6 +132,29 @@ describe('ServerDetailComponent', () => {
         expect(mockRouter.navigate).toHaveBeenCalledWith(['/servers']);
     });
 
+    it('should navigate to servers list when route id is missing', async () => {
+        TestBed.resetTestingModule();
+        const localLangSubject = new Subject();
+        await TestBed.configureTestingModule({
+            declarations: [ServerDetailComponent, MockButton, MockInput, MockDropdown, MockChart, MockTranslatePipe],
+            imports: [CommonModule, ReactiveFormsModule],
+            schemas: [NO_ERRORS_SCHEMA],
+            providers: [
+                { provide: ServerService, useValue: mockServerService },
+                { provide: Router, useValue: mockRouter },
+                { provide: ActivatedRoute, useValue: { snapshot: { paramMap: convertToParamMap({}) } } },
+                { provide: TranslateService, useValue: { instant: jest.fn((key: string) => key), get: jest.fn((key: string) => of(key)), onLangChange: localLangSubject.asObservable(), onTranslationChange: new Subject(), onDefaultLangChange: new Subject() } },
+                { provide: NotificationService, useValue: mockNotification },
+            ],
+        }).compileComponents();
+
+        (mockServerService.getById as jest.Mock).mockClear();
+        const newFixture = TestBed.createComponent(ServerDetailComponent);
+        newFixture.detectChanges();
+        expect(mockServerService.getById).not.toHaveBeenCalled();
+        expect(mockRouter.navigate).toHaveBeenCalledWith(['/servers']);
+    });
+
     it('should toggle edit mode', () => {
         expect(component.isEditMode).toBe(false);
         component.toggleEditMode();

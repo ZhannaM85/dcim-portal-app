@@ -129,4 +129,15 @@ describe('AddServerDialogComponent', () => {
         const msg = component.getErrorMessage('hostname');
         expect(msg).toBeTruthy();
     });
+
+    it('should return empty string for non-existent form field', () => {
+        const msg = component.getErrorMessage('nonExistentField');
+        expect(msg).toBe('');
+    });
+
+    it('should return empty string for valid form field', () => {
+        component.serverForm.patchValue({ hostname: 'valid-hostname' });
+        const msg = component.getErrorMessage('hostname');
+        expect(msg).toBe('');
+    });
 });
