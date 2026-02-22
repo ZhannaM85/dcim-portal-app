@@ -68,9 +68,49 @@ describe('ServerDetailChartComponent', () => {
         expect(component.chartOptions).not.toBe(oldOptions);
     });
 
+    it('should regenerate chart data when serverId changes', () => {
+        const oldOptions = component.chartOptions;
+        component.serverId = 'srv-002';
+        component.ngOnChanges({
+            serverId: {
+                currentValue: 'srv-002',
+                previousValue: 'srv-001',
+                firstChange: false,
+                isFirstChange: () => false,
+            },
+        });
+        expect(component.chartOptions).not.toBe(oldOptions);
+    });
+
+    it('should not regenerate chart data when unrelated input changes', () => {
+        const oldOptions = component.chartOptions;
+        component.ngOnChanges({
+            someOtherProp: {
+                currentValue: 'new',
+                previousValue: 'old',
+                firstChange: false,
+                isFirstChange: () => false,
+            },
+        });
+        expect(component.chartOptions).toBe(oldOptions);
+    });
+
     it('should regenerate chart data on language change', () => {
         const oldOptions = component.chartOptions;
         langChangeSubject.next({ lang: 'de' });
         expect(component.chartOptions).not.toBe(oldOptions);
+    });
+
+    it('should format tooltip with date and value', () => {
+        const formatter = component.chartOptions.tooltip?.formatter as Function;
+        expect(formatter).toBeDefined();
+
+        const timestamp = new Date('2025-06-15T10:30:00Z').getTime();
+        const context = { x: timestamp, y: 42 };
+        const result = formatter.call(context);
+
+        expect(result).toContain('<b>');
+        expect(result).toContain('</b>');
+        expect(result).toContain('CHART.CPU_USAGE_TOOLTIP');
     });
 });
