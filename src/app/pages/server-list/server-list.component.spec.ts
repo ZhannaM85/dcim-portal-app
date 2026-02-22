@@ -13,34 +13,48 @@ import { Server, MOCK_SERVERS } from '../../models/server.model';
 @Component({ selector: 'kit-button', template: '', standalone: false })
 class MockButtonComponent {
     @Input() label = '';
+
     @Input() variant = '';
+
     @Input() size = '';
+
     @Input() disabled = false;
+
     @Output() buttonClicked = new EventEmitter();
 }
 
 @Component({ selector: 'kit-checkbox', template: '', standalone: false })
 class MockCheckboxComponent {
     @Input() checked = false;
+
     @Input() indeterminate = false;
+
     @Input() disabled = false;
+
     @Output() checkedChange = new EventEmitter();
 }
 
 @Component({ selector: 'kit-dropdown', template: '', standalone: false })
 class MockDropdownComponent {
     @Input() options: unknown;
+
     @Input() selectedValue: unknown;
+
     @Input() placeholder = '';
+
     @Input() disabled = false;
+
     @Output() selectionChange = new EventEmitter();
 }
 
 @Component({ selector: 'kit-input', template: '', standalone: false })
 class MockInputComponent {
     @Input() placeholder = '';
+
     @Input() clearable = false;
+
     @Output() valueChange = new EventEmitter();
+
     @Output() cleared = new EventEmitter();
 }
 
