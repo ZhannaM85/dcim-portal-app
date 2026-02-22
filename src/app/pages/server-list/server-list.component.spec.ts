@@ -367,6 +367,12 @@ describe('ServerListComponent', () => {
         expect(srv?.uptimeHours).toBe(0);
     });
 
+    it('should skip non-existent servers during restart', () => {
+        component.selectedIds.add('srv-nonexistent');
+        component.onRestartSelected();
+        expect(component.selectedIds.size).toBe(0);
+    });
+
     it('should open add server dialog and reload on result', () => {
         const closedSubject = new Subject<Server | null>();
         (mockDialog.open as jest.Mock).mockReturnValue({ closed: closedSubject.asObservable() });

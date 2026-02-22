@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable @angular-eslint/component-selector */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -12,11 +14,15 @@ import { Server } from '../../models/server.model';
 
 @Component({ selector: 'kit-button', template: '', standalone: false })
 class MockButton {
-    @Input() label = '';
-    @Input() variant = '';
-    @Input() size = '';
-    @Input() disabled = false;
-    @Output() buttonClicked = new EventEmitter();
+    @Input() public label = '';
+
+    @Input() public variant = '';
+
+    @Input() public size = '';
+
+    @Input() public disabled = false;
+
+    @Output() public buttonClicked = new EventEmitter();
 }
 
 @Component({
@@ -24,34 +30,46 @@ class MockButton {
     providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => MockInput), multi: true }]
 })
 class MockInput implements ControlValueAccessor {
-    @Input() label = '';
-    @Input() placeholder = '';
-    @Input() type = '';
-    @Input() error = '';
-    @Input() required = false;
-    @Output() valueChange = new EventEmitter();
-    writeValue(): void {}
-    registerOnChange(): void {}
-    registerOnTouched(): void {}
+    @Input() public label = '';
+
+    @Input() public placeholder = '';
+
+    @Input() public type = '';
+
+    @Input() public error = '';
+
+    @Input() public required = false;
+
+    @Output() public valueChange = new EventEmitter();
+
+    public writeValue(): void {}
+
+    public registerOnChange(): void {}
+
+    public registerOnTouched(): void {}
 }
 
 @Component({ selector: 'kit-dropdown', template: '', standalone: false })
 class MockDropdown {
-    @Input() options: unknown;
-    @Input() selectedValue: unknown;
-    @Input() placeholder = '';
-    @Output() selectionChange = new EventEmitter();
+    @Input() public options: unknown;
+
+    @Input() public selectedValue: unknown;
+
+    @Input() public placeholder = '';
+
+    @Output() public selectionChange = new EventEmitter();
 }
 
 @Component({ selector: 'app-server-detail-chart', template: '', standalone: false })
 class MockChart {
-    @Input() serverId: unknown;
-    @Input() uptimeHours = 0;
+    @Input() public serverId: unknown;
+
+    @Input() public uptimeHours = 0;
 }
 
 @Pipe({ name: 'translate', standalone: false })
 class MockTranslatePipe implements PipeTransform {
-    transform(value: string): string { return value; }
+    public transform(value: string): string { return value; }
 }
 
 const MOCK_SERVER: Server = {
@@ -196,5 +214,52 @@ describe('ServerDetailComponent', () => {
 
     it('should unsubscribe on destroy', () => {
         expect(() => component.ngOnDestroy()).not.toThrow();
+    });
+
+    it('should not restart when server is undefined', () => {
+        component.server = undefined;
+        component.onRestart();
+        expect(mockNotification.success).not.toHaveBeenCalled();
+    });
+
+    it('should not shut down when server is undefined', () => {
+        component.server = undefined;
+        component.onShutDown();
+        expect(mockNotification.warning).not.toHaveBeenCalled();
+    });
+
+    it('should not patch form when server is undefined', () => {
+        component.server = undefined;
+        const spy = jest.spyOn(component.serverForm, 'patchValue');
+        component.toggleEditMode();
+        expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('should toggle edit mode off without calling initializeForm', () => {
+        component.toggleEditMode();
+        expect(component.isEditMode).toBe(true);
+        component.toggleEditMode();
+        expect(component.isEditMode).toBe(false);
+    });
+
+    it('should return empty string for non-existent form field', () => {
+        const msg = component.getErrorMessage('nonExistentField');
+        expect(msg).toBe('');
+    });
+
+    it('should not save when form is valid but server is undefined', () => {
+        component.toggleEditMode();
+        component.serverForm.patchValue({
+            hostname: 'valid-host',
+            ipAddress: '10.0.0.1',
+            location: 'DC-East',
+            os: 'Ubuntu',
+            cpuCores: 4,
+            ramGb: 8,
+            storageGb: 100,
+        });
+        component.server = undefined;
+        component.saveChanges();
+        expect(mockServerService.update).not.toHaveBeenCalled();
     });
 });
