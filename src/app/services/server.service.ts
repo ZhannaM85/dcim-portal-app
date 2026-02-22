@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Server, MOCK_SERVERS } from '../models/server.model';
+import { generateServerId } from '../utils/utils';
 
 @Injectable({
     providedIn: 'root',
@@ -24,12 +25,7 @@ export class ServerService {
     }
 
     public create(serverData: Partial<Server>): Server {
-        // Generate unique ID
-        const maxId = this.servers.reduce((max, s) => {
-            const num = parseInt(s.id.replace('srv-', ''), 10);
-            return num > max ? num : max;
-        }, 0);
-        const newId = `srv-${String(maxId + 1).padStart(3, '0')}`;
+        const newId = generateServerId(this.servers);
 
         const newServer: Server = {
             id: newId,

@@ -2,6 +2,7 @@ import { Component, Input, OnInit, OnChanges, OnDestroy, SimpleChanges } from '@
 import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import * as Highcharts from 'highcharts';
+import { generateCpuDataPoints } from '../../utils/utils';
 
 @Component({
     selector: 'app-server-detail-chart',
@@ -40,17 +41,7 @@ export class ServerDetailChartComponent implements OnInit, OnChanges, OnDestroy 
     }
 
     private generateChartData(): void {
-        const dataPoints: [number, number][] = [];
-        const now = Date.now();
-        const hoursToShow = Math.min(24, Math.max(1, Math.floor(this.uptimeHours)));
-
-        for (let i = hoursToShow; i >= 0; i--) {
-            const timestamp = now - (i * 60 * 60 * 1000);
-            const baseUsage = 40 + (Math.sin(i / 3) * 15);
-            const variation = (Math.random() - 0.5) * 20;
-            const cpuUsage = Math.max(10, Math.min(90, baseUsage + variation));
-            dataPoints.push([timestamp, Math.round(cpuUsage * 10) / 10]);
-        }
+        const dataPoints = generateCpuDataPoints(this.uptimeHours);
 
         const cpuUsageLabel = this.translate.instant('CHART.CPU_USAGE_LABEL');
         const tooltipTemplate = this.translate.instant('CHART.CPU_USAGE_TOOLTIP', { value: '{y}' });

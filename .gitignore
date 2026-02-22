@@ -22,3 +22,6 @@ Thumbs.db
 
 # TypeScript output
 /out-tsc
+
+# Test coverage
+/coverage

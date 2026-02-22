@@ -9,11 +9,7 @@ import { Server } from '../../models/server.model';
 import { ServerService } from '../../services/server.service';
 import { AddServerDialogComponent } from './add-server-dialog/add-server-dialog.component';
 import { ConfirmDialogComponent, ConfirmDialogData } from './confirm-dialog/confirm-dialog.component';
-
-type SortColumn = 'hostname' | 'ipAddress' | 'status' | 'location' | 'os' | 'cpuCores' | 'ramGb' | 'storageGb' | 'uptimeHours';
-type SortDirection = 'asc' | 'desc';
-
-const NUMERIC_COLUMNS: ReadonlySet<SortColumn> = new Set(['cpuCores', 'ramGb', 'storageGb', 'uptimeHours']);
+import { filterServers, sortServers, SortColumn, SortDirection, formatUptime } from '../../utils/utils';
 
 const MIN_SEARCH_LENGTH = 3;
 
@@ -95,38 +91,14 @@ export class ServerListComponent implements OnInit, OnDestroy {
     }
 
     public applyFilters(): void {
-        const searchActive = this.searchTerm.length >= MIN_SEARCH_LENGTH;
-        const term = this.searchTerm.toLowerCase();
-
-        this.filteredServers = this.servers.filter((s) => {
-            const matchesStatus =
-                !this.selectedStatus || s.status === this.selectedStatus;
-            const matchesLocation =
-                !this.selectedLocation || s.location === this.selectedLocation;
-
-            let matchesSearch = true;
-            if (searchActive) {
-                const field = this.selectedSearchType === 'os' ? s.os : s.hostname;
-                matchesSearch = field.toLowerCase().includes(term);
-            }
-
-            return matchesStatus && matchesLocation && matchesSearch;
+        const filtered = filterServers(this.servers, {
+            status: this.selectedStatus,
+            location: this.selectedLocation,
+            searchTerm: this.searchTerm,
+            searchType: this.selectedSearchType,
         });
 
-        if (this.sortColumn) {
-            const col = this.sortColumn;
-            const dir = this.sortDirection === 'asc' ? 1 : -1;
-
-            this.filteredServers.sort((a, b) => {
-                const valA = a[col];
-                const valB = b[col];
-
-                if (NUMERIC_COLUMNS.has(col)) {
-                    return ((valA as number) - (valB as number)) * dir;
-                }
-                return String(valA).localeCompare(String(valB)) * dir;
-            });
-        }
+        this.filteredServers = sortServers(filtered, this.sortColumn, this.sortDirection);
 
         const visibleIds = new Set(this.filteredServers.map((s) => s.id));
         this.selectedIds.forEach((id) => {
@@ -292,10 +264,7 @@ export class ServerListComponent implements OnInit, OnDestroy {
     }
 
     public formatUptime(hours: number): string {
-        if (hours === 0) return this.translate.instant('COMMON.OFFLINE');
-        if (hours < 24) return `${hours}h`;
-        const days = Math.floor(hours / 24);
-        return `${days}d ${hours % 24}h`;
+        return formatUptime(hours, this.translate.instant('COMMON.OFFLINE'));
     }
 
     private buildTranslatedOptions(): void {
