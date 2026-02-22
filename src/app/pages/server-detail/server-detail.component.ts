@@ -6,6 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Server, ServerLocation } from '../../models/server.model';
 import { ServerService } from '../../services/server.service';
 import { DropdownOption, NotificationService } from '@zhannam85/ui-kit';
+import { IP_ADDRESS_REGEX, getValidationErrorKey, formatUptime } from '../../utils/utils';
 
 @Component({
     standalone: false,
@@ -22,7 +23,7 @@ export class ServerDetailComponent implements OnInit, OnDestroy {
 
     public locationOptions: DropdownOption[] = [];
 
-    private ipRegex = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+    private ipRegex = IP_ADDRESS_REGEX;
 
     private langSubscription!: Subscription;
 
@@ -106,10 +107,7 @@ export class ServerDetailComponent implements OnInit, OnDestroy {
     }
 
     public formatUptime(hours: number): string {
-        if (hours === 0) return this.translate.instant('COMMON.OFFLINE');
-        if (hours < 24) return `${hours}h`;
-        const days = Math.floor(hours / 24);
-        return `${days}d ${hours % 24}h`;
+        return formatUptime(hours, this.translate.instant('COMMON.OFFLINE'));
     }
 
     public toggleEditMode(): void {
@@ -151,25 +149,8 @@ export class ServerDetailComponent implements OnInit, OnDestroy {
 
     public getErrorMessage(fieldName: string): string {
         const control = this.serverForm.get(fieldName);
-        if (control?.hasError('required')) {
-            return this.translate.instant('COMMON.VALIDATION.REQUIRED', { field: fieldName });
-        }
-        if (control?.hasError('minlength')) {
-            return this.translate.instant('COMMON.VALIDATION.MIN_LENGTH', {
-                field: fieldName,
-                length: control.errors?.['minlength'].requiredLength,
-            });
-        }
-        if (control?.hasError('pattern')) {
-            return this.translate.instant('COMMON.VALIDATION.INVALID_IP');
-        }
-        if (control?.hasError('min')) {
-            return this.translate.instant('COMMON.VALIDATION.MIN_VALUE', { min: control.errors?.['min'].min });
-        }
-        if (control?.hasError('max')) {
-            return this.translate.instant('COMMON.VALIDATION.MAX_VALUE', { max: control.errors?.['max'].max });
-        }
-        return '';
+        const error = getValidationErrorKey(control ?? null, fieldName);
+        return error ? this.translate.instant(error.key, error.params) : '';
     }
 
     private buildTranslatedOptions(): void {
