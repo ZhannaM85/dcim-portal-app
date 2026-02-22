@@ -75,6 +75,11 @@ describe('generateServerId', () => {
     it('should handle single server', () => {
         expect(generateServerId([{ id: 'srv-012' }])).toBe('srv-013');
     });
+
+    it('should use the max ID when servers are in descending order', () => {
+        const servers = [{ id: 'srv-010' }, { id: 'srv-003' }, { id: 'srv-007' }];
+        expect(generateServerId(servers)).toBe('srv-011');
+    });
 });
 
 // --- IP_ADDRESS_REGEX ---
