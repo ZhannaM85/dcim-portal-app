@@ -105,6 +105,13 @@
     "LANGUAGE_CHANGED": "Language selection was applied",
     "UNDO": "Undo"
   },
+  "THEME": {
+    "LABEL": "Theme",
+    "LIGHT": "Light",
+    "DARK": "Dark",
+    "PINK": "Pink",
+    "GREEN": "Green"
+  },
   "CHART": {
     "CPU_USAGE_TITLE": "CPU Usage Over Time",
     "TIME": "Time",
