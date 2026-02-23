@@ -6,6 +6,12 @@
     <nav class="app-header__nav">
         <span class="app-header__subtitle">{{ 'APP.SUBTITLE' | translate }}</span>
         <kit-dropdown
+            class="app-header__theme-switcher"
+            [options]="themeOptions"
+            [selectedValue]="currentTheme"
+            (selectionChange)="switchTheme($event)">
+        </kit-dropdown>
+        <kit-dropdown
             class="app-header__lang-switcher"
             [options]="languageOptions"
             [selectedValue]="currentLang"

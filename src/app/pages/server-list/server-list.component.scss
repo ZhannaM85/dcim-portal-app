@@ -73,7 +73,7 @@
         }
 
         th {
-            background: #f8fafc;
+            background: var(--color-table-header-bg);
             font-weight: 600;
             font-size: 12px;
             text-transform: uppercase;
@@ -87,7 +87,7 @@
 
                 &:hover {
                     color: var(--color-text);
-                    background: #f1f5f9;
+                    background: var(--color-table-header-hover-bg);
                 }
 
                 kit-icon-sort-asc,
@@ -107,11 +107,11 @@
         }
 
         tbody tr:hover {
-            background-color: #f1f5f9;
+            background-color: var(--color-table-row-hover);
         }
 
         tbody tr.selected {
-            background-color: #eff6ff;
+            background-color: var(--color-table-row-selected);
         }
     }
 
@@ -138,7 +138,7 @@
         text-decoration: underline;
 
         &:hover {
-            color: var(--color-primary-hover, #3a7bd5);
+            color: var(--color-primary-hover);
         }
     }
 }

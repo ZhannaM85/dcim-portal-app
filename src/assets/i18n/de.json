@@ -105,6 +105,13 @@
     "LANGUAGE_CHANGED": "Sprachauswahl wurde angewendet",
     "UNDO": "Rückgängig"
   },
+  "THEME": {
+    "LABEL": "Design",
+    "LIGHT": "Hell",
+    "DARK": "Dunkel",
+    "PINK": "Rosa",
+    "GREEN": "Grün"
+  },
   "CHART": {
     "CPU_USAGE_TITLE": "CPU-Auslastung im Zeitverlauf",
     "TIME": "Zeit",

@@ -9,12 +9,13 @@
     align-items: center;
     padding: 0 24px;
     height: 56px;
-    background-color: #1e293b;
-    color: #f8fafc;
+    background-color: var(--color-header-bg);
+    color: var(--color-header-text);
     box-shadow: var(--shadow-md);
     position: sticky;
     top: 0;
     z-index: 100;
+    transition: background-color 0.3s ease, color 0.3s ease;
 
     &__brand {
         display: flex;
@@ -31,8 +32,8 @@
         justify-content: center;
         width: 32px;
         height: 32px;
-        background-color: #334155;
-        color: #38bdf8;
+        background-color: var(--color-header-logo-bg);
+        color: var(--color-header-logo-text);
         font-weight: 700;
         font-size: 13px;
         border-radius: 6px;
@@ -56,13 +57,14 @@
 
     &__subtitle {
         font-size: 13px;
-        color: #94a3b8;
+        color: var(--color-header-subtitle);
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         min-width: 0;
     }
 
+    &__theme-switcher,
     &__lang-switcher {
         width: 160px;
         flex-shrink: 0;
