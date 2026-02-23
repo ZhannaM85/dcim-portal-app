@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import * as Highcharts from 'highcharts';
 import { generateCpuDataPoints } from '../../utils/utils';
+import { ThemeService } from '../../services/theme.service';
 
 @Component({
     selector: 'app-server-detail-chart',
@@ -19,14 +20,28 @@ export class ServerDetailChartComponent implements OnInit, OnChanges, OnDestroy 
 
     public chartOptions: Highcharts.Options = {};
 
-    private langSubscription!: Subscription;
+    public updateFlag = false;
 
-    constructor(private translate: TranslateService) {}
+    private langSubscription!: Subscription;
+    private themeObserver!: MutationObserver;
+
+    constructor(
+        private translate: TranslateService,
+        private themeService: ThemeService,
+    ) {}
 
     public ngOnInit(): void {
         this.generateChartData();
         this.langSubscription = this.translate.onLangChange.subscribe(() => {
             this.generateChartData();
+        });
+
+        this.themeObserver = new MutationObserver(() => {
+            this.generateChartData();
+        });
+        this.themeObserver.observe(document.body, {
+            attributes: true,
+            attributeFilter: ['class'],
         });
     }
 
@@ -38,10 +53,23 @@ export class ServerDetailChartComponent implements OnInit, OnChanges, OnDestroy 
 
     public ngOnDestroy(): void {
         this.langSubscription.unsubscribe();
+        this.themeObserver.disconnect();
+    }
+
+    private getThemeColors(): { text: string; textSecondary: string; border: string; primary: string; primaryRgb: string } {
+        const style = getComputedStyle(document.body);
+        return {
+            text: style.getPropertyValue('--color-text').trim() || '#1e293b',
+            textSecondary: style.getPropertyValue('--color-text-secondary').trim() || '#64748b',
+            border: style.getPropertyValue('--color-border').trim() || '#e2e8f0',
+            primary: style.getPropertyValue('--color-primary').trim() || '#4a90e2',
+            primaryRgb: style.getPropertyValue('--kit-color-primary-rgb').trim() || '74, 144, 226',
+        };
     }
 
     private generateChartData(): void {
         const dataPoints = generateCpuDataPoints(this.uptimeHours);
+        const colors = this.getThemeColors();
 
         const cpuUsageLabel = this.translate.instant('CHART.CPU_USAGE_LABEL');
         const tooltipTemplate = this.translate.instant('CHART.CPU_USAGE_TOOLTIP', { value: '{y}' });
@@ -57,26 +85,35 @@ export class ServerDetailChartComponent implements OnInit, OnChanges, OnDestroy 
                 style: {
                     fontSize: '16px',
                     fontWeight: '600',
+                    color: colors.text,
                 },
             },
             xAxis: {
                 type: 'datetime',
                 title: {
                     text: this.translate.instant('CHART.TIME'),
+                    style: { color: colors.textSecondary },
                 },
                 labels: {
                     format: '{value:%H:%M}',
+                    style: { color: colors.textSecondary },
                 },
+                lineColor: colors.border,
+                tickColor: colors.border,
+                gridLineColor: colors.border,
             },
             yAxis: {
                 title: {
                     text: this.translate.instant('CHART.CPU_USAGE_PERCENT'),
+                    style: { color: colors.textSecondary },
                 },
                 min: 0,
                 max: 100,
                 labels: {
                     format: '{value}%',
+                    style: { color: colors.textSecondary },
                 },
+                gridLineColor: colors.border,
             },
             tooltip: {
                 formatter: function () {
@@ -89,7 +126,7 @@ export class ServerDetailChartComponent implements OnInit, OnChanges, OnDestroy 
                     name: cpuUsageLabel,
                     type: 'area',
                     data: dataPoints,
-                    color: '#4a90e2',
+                    color: colors.primary,
                     lineWidth: 2,
                     marker: {
                         enabled: false,
@@ -98,8 +135,8 @@ export class ServerDetailChartComponent implements OnInit, OnChanges, OnDestroy 
                     fillColor: {
                         linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
                         stops: [
-                            [0, 'rgba(74, 144, 226, 0.3)'],
-                            [1, 'rgba(74, 144, 226, 0.05)'],
+                            [0, `rgba(${colors.primaryRgb}, 0.3)`],
+                            [1, `rgba(${colors.primaryRgb}, 0.05)`],
                         ],
                     },
                     fillOpacity: 0.3,
@@ -112,5 +149,7 @@ export class ServerDetailChartComponent implements OnInit, OnChanges, OnDestroy 
                 enabled: false,
             },
         };
+        this.updateFlag = true;
+        setTimeout(() => this.updateFlag = false);
     }
 }
