@@ -105,6 +105,13 @@
     "LANGUAGE_CHANGED": "Taalselectie is toegepast",
     "UNDO": "Ongedaan maken"
   },
+  "THEME": {
+    "LABEL": "Thema",
+    "LIGHT": "Licht",
+    "DARK": "Donker",
+    "PINK": "Roze",
+    "GREEN": "Groen"
+  },
   "CHART": {
     "CPU_USAGE_TITLE": "CPU-gebruik in de tijd",
     "TIME": "Tijd",
