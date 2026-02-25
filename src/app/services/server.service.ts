@@ -21,7 +21,13 @@ export class ServerService {
     }
 
     public restoreServers(servers: Server[]): void {
-        this.servers.push(...servers);
+        const existingIds = new Set(this.servers.map((s) => s.id));
+        const toAdd = servers.filter((s) => {
+            if (existingIds.has(s.id)) return false;
+            existingIds.add(s.id);
+            return true;
+        });
+        this.servers.push(...toAdd);
     }
 
     public create(serverData: Partial<Server>): Server {
@@ -29,15 +35,15 @@ export class ServerService {
 
         const newServer: Server = {
             id: newId,
-            hostname: serverData.hostname || '',
-            ipAddress: serverData.ipAddress || '',
-            status: serverData.status || 'stopped',
-            location: serverData.location || 'DC-East',
-            os: serverData.os || '',
-            cpuCores: serverData.cpuCores || 4,
-            ramGb: serverData.ramGb || 8,
-            storageGb: serverData.storageGb || 100,
-            uptimeHours: serverData.uptimeHours || 0,
+            hostname: serverData.hostname ?? '',
+            ipAddress: serverData.ipAddress ?? '',
+            status: serverData.status ?? 'stopped',
+            location: serverData.location ?? 'DC-East',
+            os: serverData.os ?? '',
+            cpuCores: serverData.cpuCores ?? 4,
+            ramGb: serverData.ramGb ?? 8,
+            storageGb: serverData.storageGb ?? 100,
+            uptimeHours: serverData.uptimeHours ?? 0,
         };
 
         this.servers.push(newServer);

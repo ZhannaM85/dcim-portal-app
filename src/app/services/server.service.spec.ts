@@ -62,6 +62,16 @@ describe('ServerService', () => {
             expect(created.ramGb).toBe(8);
             expect(created.storageGb).toBe(100);
         });
+
+        it('should preserve intentional falsy values (use ?? not ||)', () => {
+            const created = service.create({
+                hostname: 'test',
+                uptimeHours: 0,
+                cpuCores: 2,
+            });
+            expect(created.uptimeHours).toBe(0);
+            expect(created.cpuCores).toBe(2);
+        });
     });
 
     describe('update', () => {
@@ -113,6 +123,16 @@ describe('ServerService', () => {
             expect(service.getById('srv-001')).toBeUndefined();
 
             service.restoreServers([server]);
+            expect(service.getById('srv-001')).toBeDefined();
+        });
+
+        it('should dedupe by id and not add duplicates', () => {
+            const server = service.getById('srv-001')!;
+            service.deleteByIds(['srv-001']);
+            const countBefore = service.getAll().length;
+
+            service.restoreServers([server, server]);
+            expect(service.getAll().length).toBe(countBefore + 1);
             expect(service.getById('srv-001')).toBeDefined();
         });
     });
