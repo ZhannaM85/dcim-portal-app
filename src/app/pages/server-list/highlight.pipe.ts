@@ -7,8 +7,20 @@ import { highlightText } from '../../utils/utils';
     standalone: false,
 })
 export class HighlightPipe implements PipeTransform {
+    /**
+     * Creates a highlighting HTML fragment for matching search text.
+     *
+     * @param sanitizer Angular DOM sanitizer.
+     */
     constructor(private sanitizer: DomSanitizer) {}
 
+    /**
+     * Highlights the search term inside plain text and returns safe HTML.
+     *
+     * @param text Source text.
+     * @param search Search term to highlight.
+     * @returns Safe HTML containing highlighted matches.
+     */
     public transform(text: string, search: string): SafeHtml {
         const result = highlightText(text, search);
         if (result === text) {

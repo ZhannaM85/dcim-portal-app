@@ -10,6 +10,9 @@ import { ThemeService, ThemeName } from './services/theme.service';
     styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
+    /**
+     * Available UI languages shown in the language selector.
+     */
     public languageOptions: DropdownOption[] = [
         { label: 'English', value: 'en' },
         { label: 'Русский', value: 'ru' },
@@ -18,11 +21,24 @@ export class AppComponent {
         { label: 'Nederlands', value: 'nl' },
     ];
 
+    /**
+     * Localized theme options for the theme selector.
+     */
     public themeOptions: DropdownOption[] = [];
 
+    /**
+     * Currently active language code.
+     */
     public currentLang: string;
+
+    /**
+     * Currently active application theme.
+     */
     public currentTheme: ThemeName;
 
+    /**
+     * Initializes translation settings and restores persisted language/theme state.
+     */
     constructor(
         private translate: TranslateService,
         private notificationService: NotificationService,
@@ -43,6 +59,11 @@ export class AppComponent {
         });
     }
 
+    /**
+     * Switches the active application language and persists it in local storage.
+     *
+     * @param lang Target language code.
+     */
     public switchLanguage(lang: string): void {
         this.currentLang = lang;
         this.translate.use(lang).subscribe(() => {
@@ -53,11 +74,19 @@ export class AppComponent {
         localStorage.setItem('app-lang', lang);
     }
 
+    /**
+     * Applies the selected theme across the application.
+     *
+     * @param theme Theme identifier to apply.
+     */
     public switchTheme(theme: ThemeName): void {
         this.currentTheme = theme;
         this.themeService.setTheme(theme);
     }
 
+    /**
+     * Rebuilds localized theme dropdown options based on current language.
+     */
     private buildThemeOptions(): void {
         this.themeOptions = [
             { label: this.translate.instant('THEME.LIGHT'), value: 'light' },

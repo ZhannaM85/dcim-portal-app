@@ -27,6 +27,9 @@ export class ServerDetailComponent implements OnInit, OnDestroy {
 
     private langSubscription!: Subscription;
 
+    /**
+     * Initializes detail page state and edit form.
+     */
     constructor(
         private route: ActivatedRoute,
         private router: Router,
@@ -47,6 +50,9 @@ export class ServerDetailComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Loads selected server and sets up translation updates.
+     */
     public ngOnInit(): void {
         const id = this.route.snapshot.paramMap.get('id');
         if (id) {
@@ -64,10 +70,16 @@ export class ServerDetailComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Cleans up translation subscriptions.
+     */
     public ngOnDestroy(): void {
         this.langSubscription.unsubscribe();
     }
 
+    /**
+     * Initializes form controls from currently loaded server values.
+     */
     private initializeForm(): void {
         if (this.server) {
             this.serverForm.patchValue({
@@ -82,10 +94,16 @@ export class ServerDetailComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Navigates back to the servers list page.
+     */
     public goBack(): void {
         this.router.navigate(['/servers']);
     }
 
+    /**
+     * Sets server status to running and resets uptime.
+     */
     public onRestart(): void {
         if (this.server) {
             this.server.status = 'running';
@@ -96,6 +114,9 @@ export class ServerDetailComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Sets server status to stopped and resets uptime.
+     */
     public onShutDown(): void {
         if (this.server) {
             this.server.status = 'stopped';
@@ -106,10 +127,19 @@ export class ServerDetailComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Formats uptime label using shared utility and translated offline text.
+     *
+     * @param hours Uptime in hours.
+     * @returns Human-readable uptime text.
+     */
     public formatUptime(hours: number): string {
         return formatUptime(hours, this.translate.instant('COMMON.OFFLINE'));
     }
 
+    /**
+     * Toggles edit mode and re-syncs form when entering edit state.
+     */
     public toggleEditMode(): void {
         this.isEditMode = !this.isEditMode;
         if (this.isEditMode) {
@@ -117,6 +147,9 @@ export class ServerDetailComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Persists form updates for the current server when valid.
+     */
     public saveChanges(): void {
         if (this.serverForm.valid && this.server) {
             const formValue = this.serverForm.value;
@@ -142,17 +175,29 @@ export class ServerDetailComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Exits edit mode and restores form values from server data.
+     */
     public cancelEdit(): void {
         this.isEditMode = false;
         this.initializeForm();
     }
 
+    /**
+     * Returns translated validation message for a form field.
+     *
+     * @param fieldName Form control name.
+     * @returns Localized validation message.
+     */
     public getErrorMessage(fieldName: string): string {
         const control = this.serverForm.get(fieldName);
         const error = getValidationErrorKey(control ?? null, fieldName);
         return error ? this.translate.instant(error.key, error.params) : '';
     }
 
+    /**
+     * Rebuilds translated location options for the form dropdown.
+     */
     private buildTranslatedOptions(): void {
         this.locationOptions = [
             { label: this.translate.instant('COMMON.LOCATIONS.DC_EAST'), value: 'DC-East' },
