@@ -51,6 +51,9 @@ export class ServerListComponent implements OnInit, OnDestroy {
 
     private langSubscription!: Subscription;
 
+    /**
+     * Initializes list page dependencies and translated filter options.
+     */
     constructor(
         private serverService: ServerService,
         private router: Router,
@@ -62,6 +65,9 @@ export class ServerListComponent implements OnInit, OnDestroy {
         this.buildTranslatedOptions();
     }
 
+    /**
+     * Subscribes to search/language updates and loads server data.
+     */
     public ngOnInit(): void {
         this.searchSubscription = this.searchSubject.pipe(
             debounceTime(300),
@@ -80,16 +86,25 @@ export class ServerListComponent implements OnInit, OnDestroy {
         this.loadServers();
     }
 
+    /**
+     * Cleans up active subscriptions.
+     */
     public ngOnDestroy(): void {
         this.searchSubscription.unsubscribe();
         this.langSubscription.unsubscribe();
     }
 
+    /**
+     * Loads servers from the service and applies current filters.
+     */
     public loadServers(): void {
         this.servers = this.serverService.getAll();
         this.applyFilters();
     }
 
+    /**
+     * Applies filter and sort state to the server list.
+     */
     public applyFilters(): void {
         const filtered = filterServers(this.servers, {
             status: this.selectedStatus,
@@ -108,15 +123,28 @@ export class ServerListComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Pushes search input to debounced search stream.
+     *
+     * @param value Raw search text.
+     */
     public onSearchInput(value: string): void {
         this.searchSubject.next(value);
     }
 
+    /**
+     * Clears current search term and reapplies filters.
+     */
     public onSearchCleared(): void {
         this.searchTerm = '';
         this.applyFilters();
     }
 
+    /**
+     * Updates search field type and reruns filtering when applicable.
+     *
+     * @param value Search target field.
+     */
     public onSearchTypeChange(value: string): void {
         this.selectedSearchType = value;
         if (this.searchTerm.length >= MIN_SEARCH_LENGTH) {
@@ -124,6 +152,9 @@ export class ServerListComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Resets all active filters to defaults.
+     */
     public clearAllFilters(): void {
         this.searchTerm = '';
         this.selectedSearchType = 'hostname';
@@ -132,10 +163,18 @@ export class ServerListComponent implements OnInit, OnDestroy {
         this.applyFilters();
     }
 
+    /**
+     * Indicates whether any filter/search value is currently active.
+     */
     public get hasActiveFilters(): boolean {
         return !!(this.searchTerm || this.selectedStatus || this.selectedLocation);
     }
 
+    /**
+     * Toggles sorting state for the selected column.
+     *
+     * @param column Column to sort by.
+     */
     public sort(column: SortColumn): void {
         if (this.sortColumn === column) {
             if (this.sortDirection === 'asc') {
@@ -151,16 +190,29 @@ export class ServerListComponent implements OnInit, OnDestroy {
         this.applyFilters();
     }
 
+    /**
+     * Applies selected status filter.
+     *
+     * @param value Status value.
+     */
     public onStatusFilterChange(value: string): void {
         this.selectedStatus = value;
         this.applyFilters();
     }
 
+    /**
+     * Applies selected location filter.
+     *
+     * @param value Location value.
+     */
     public onLocationFilterChange(value: string): void {
         this.selectedLocation = value;
         this.applyFilters();
     }
 
+    /**
+     * Indicates whether all currently visible servers are selected.
+     */
     public get allSelected(): boolean {
         return (
             this.filteredServers.length > 0 &&
@@ -168,6 +220,9 @@ export class ServerListComponent implements OnInit, OnDestroy {
         );
     }
 
+    /**
+     * Indicates whether selection is partially applied.
+     */
     public get someSelected(): boolean {
         return (
             this.selectedIds.size > 0 &&
@@ -175,10 +230,18 @@ export class ServerListComponent implements OnInit, OnDestroy {
         );
     }
 
+    /**
+     * Indicates whether any server is selected.
+     */
     public get hasSelection(): boolean {
         return this.selectedIds.size > 0;
     }
 
+    /**
+     * Selects or clears selection for all currently filtered servers.
+     *
+     * @param checked `true` to select all, `false` to clear selection.
+     */
     public toggleSelectAll(checked: boolean): void {
         if (checked) {
             this.filteredServers.forEach((s) => this.selectedIds.add(s.id));
@@ -187,6 +250,12 @@ export class ServerListComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Toggles selection state for an individual server.
+     *
+     * @param serverId Server identifier.
+     * @param checked Selected state.
+     */
     public toggleServerSelection(serverId: string, checked: boolean): void {
         if (checked) {
             this.selectedIds.add(serverId);
@@ -195,14 +264,28 @@ export class ServerListComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Checks whether a server is currently selected.
+     *
+     * @param serverId Server identifier.
+     * @returns `true` when selected.
+     */
     public isSelected(serverId: string): boolean {
         return this.selectedIds.has(serverId);
     }
 
+    /**
+     * Navigates to the detail page for a server.
+     *
+     * @param serverId Server identifier.
+     */
     public navigateToDetail(serverId: string): void {
         this.router.navigate(['/servers', serverId]);
     }
 
+    /**
+     * Opens delete confirmation and deletes selected servers when confirmed.
+     */
     public onDeleteSelected(): void {
         const ids = Array.from(this.selectedIds);
         const count = ids.length;
@@ -248,6 +331,9 @@ export class ServerListComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Marks selected servers as restarted and resets uptime.
+     */
     public onRestartSelected(): void {
         const count = this.selectedIds.size;
         this.selectedIds.forEach((id) => {
@@ -263,10 +349,19 @@ export class ServerListComponent implements OnInit, OnDestroy {
         );
     }
 
+    /**
+     * Formats uptime using shared utility and translated offline text.
+     *
+     * @param hours Uptime in hours.
+     * @returns Human-readable uptime text.
+     */
     public formatUptime(hours: number): string {
         return formatUptime(hours, this.translate.instant('COMMON.OFFLINE'));
     }
 
+    /**
+     * Rebuilds translated dropdown options for filters/search.
+     */
     private buildTranslatedOptions(): void {
         this.searchTypeOptions = [
             { label: this.translate.instant('SERVER_LIST.SEARCH_TYPE.HOSTNAME'), value: 'hostname' },
@@ -286,6 +381,9 @@ export class ServerListComponent implements OnInit, OnDestroy {
         ];
     }
 
+    /**
+     * Opens add-server dialog and refreshes list on successful creation.
+     */
     public onAddServer(): void {
         const dialogRef = this.dialog.open<Server>(AddServerDialogComponent, {
             width: '600px',

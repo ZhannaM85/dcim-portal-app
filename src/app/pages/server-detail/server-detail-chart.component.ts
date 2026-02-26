@@ -25,11 +25,17 @@ export class ServerDetailChartComponent implements OnInit, OnChanges, OnDestroy 
     private langSubscription!: Subscription;
     private themeObserver!: MutationObserver;
 
+    /**
+     * Initializes chart dependencies.
+     */
     constructor(
         private translate: TranslateService,
         private themeService: ThemeService,
     ) {}
 
+    /**
+     * Generates initial chart and subscribes to language/theme changes.
+     */
     public ngOnInit(): void {
         this.generateChartData();
         this.langSubscription = this.translate.onLangChange.subscribe(() => {
@@ -45,17 +51,30 @@ export class ServerDetailChartComponent implements OnInit, OnChanges, OnDestroy 
         });
     }
 
+    /**
+     * Refreshes chart data when relevant inputs change.
+     *
+     * @param changes Angular input change map.
+     */
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes['serverId'] || changes['uptimeHours']) {
             this.generateChartData();
         }
     }
 
+    /**
+     * Cleans up subscriptions and observers.
+     */
     public ngOnDestroy(): void {
         this.langSubscription.unsubscribe();
         this.themeObserver.disconnect();
     }
 
+    /**
+     * Reads active CSS theme tokens used by chart styling.
+     *
+     * @returns Chart color palette derived from CSS variables.
+     */
     private getThemeColors(): { text: string; textSecondary: string; border: string; primary: string; primaryRgb: string } {
         const style = getComputedStyle(document.body);
         return {
@@ -67,6 +86,9 @@ export class ServerDetailChartComponent implements OnInit, OnChanges, OnDestroy 
         };
     }
 
+    /**
+     * Rebuilds chart configuration and toggles Highcharts update flag.
+     */
     private generateChartData(): void {
         const dataPoints = generateCpuDataPoints(this.uptimeHours);
         const colors = this.getThemeColors();

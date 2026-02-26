@@ -22,6 +22,9 @@ export class AddServerDialogComponent {
 
     private ipRegex = IP_ADDRESS_REGEX;
 
+    /**
+     * Builds add-server form with translated dropdown options.
+     */
     constructor(
         private fb: FormBuilder,
         private dialogRef: DialogRef<Server>,
@@ -73,6 +76,9 @@ export class AddServerDialogComponent {
         return this.serverForm.get('storageGb');
     }
 
+    /**
+     * Validates and submits form values to create a new server.
+     */
     public onSubmit(): void {
         if (this.serverForm.valid) {
             const formValue = this.serverForm.value;
@@ -96,16 +102,28 @@ export class AddServerDialogComponent {
         }
     }
 
+    /**
+     * Closes the dialog without creating a server.
+     */
     public onCancel(): void {
         this.dialogRef.close();
     }
 
+    /**
+     * Resolves translated validation error text for a form field.
+     *
+     * @param fieldName Form control name.
+     * @returns Localized validation message.
+     */
     public getErrorMessage(fieldName: string): string {
         const control = this.serverForm.get(fieldName);
         const error = getValidationErrorKey(control ?? null, fieldName);
         return error ? this.translate.instant(error.key, error.params) : '';
     }
 
+    /**
+     * Rebuilds translated dropdown options for locations and statuses.
+     */
     private buildTranslatedOptions(): void {
         this.locationOptions = [
             { label: this.translate.instant('COMMON.LOCATIONS.DC_EAST'), value: 'DC-East' },

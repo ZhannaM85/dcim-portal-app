@@ -3,6 +3,13 @@ import { Server } from '../models/server.model';
 
 // --- Uptime formatting ---
 
+/**
+ * Formats uptime in hours into a short human-readable label.
+ *
+ * @param hours Uptime in hours.
+ * @param offlineLabel Label used when uptime is zero.
+ * @returns Formatted uptime text.
+ */
 export function formatUptime(hours: number, offlineLabel: string): string {
     if (hours === 0) return offlineLabel;
     if (hours < 24) return `${hours}h`;
@@ -12,6 +19,12 @@ export function formatUptime(hours: number, offlineLabel: string): string {
 
 // --- Server ID generation ---
 
+/**
+ * Generates the next sequential server id in `srv-XXX` format.
+ *
+ * @param existingServers Existing servers that already contain ids.
+ * @returns Generated unique server id.
+ */
 export function generateServerId(existingServers: { id: string }[]): string {
     const maxId = existingServers.reduce((max, s) => {
         const num = parseInt(s.id.replace('srv-', ''), 10);
@@ -29,6 +42,13 @@ export interface ValidationError {
     params?: Record<string, unknown>;
 }
 
+/**
+ * Maps Angular validation errors to translation keys and params.
+ *
+ * @param control Form control to inspect.
+ * @param fieldName Field label key used in translated messages.
+ * @returns Validation metadata or `null` when no known error exists.
+ */
 export function getValidationErrorKey(control: AbstractControl | null, fieldName: string): ValidationError | null {
     if (!control) return null;
 
@@ -69,6 +89,13 @@ export interface ServerFilterCriteria {
     searchType?: string;
 }
 
+/**
+ * Applies status, location, and optional text search filters to servers.
+ *
+ * @param servers Source server list.
+ * @param filters Filter criteria.
+ * @returns Filtered server list.
+ */
 export function filterServers(servers: Server[], filters: ServerFilterCriteria): Server[] {
     const searchActive = (filters.searchTerm?.length ?? 0) >= MIN_SEARCH_LENGTH;
     const term = (filters.searchTerm ?? '').toLowerCase();
@@ -87,6 +114,14 @@ export function filterServers(servers: Server[], filters: ServerFilterCriteria):
     });
 }
 
+/**
+ * Sorts servers by selected column and direction.
+ *
+ * @param servers Source server list.
+ * @param column Target sort column, or `null` to keep original order.
+ * @param direction Sort direction.
+ * @returns Sorted server list.
+ */
 export function sortServers(servers: Server[], column: SortColumn | null, direction: SortDirection): Server[] {
     if (!column) return servers;
 
@@ -104,10 +139,24 @@ export function sortServers(servers: Server[], column: SortColumn | null, direct
 
 // --- Highlight / regex ---
 
+/**
+ * Escapes regular expression meta characters in input text.
+ *
+ * @param str Raw text.
+ * @returns Escaped text safe to place in a regex pattern.
+ */
 export function escapeRegex(str: string): string {
     return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
+/**
+ * Wraps matched search text in `<mark>` tags.
+ *
+ * @param text Original text to process.
+ * @param search Search term to highlight.
+ * @param minLength Minimum search length before highlighting starts.
+ * @returns Highlighted HTML string.
+ */
 export function highlightText(text: string, search: string, minLength = 3): string {
     if (!search || search.length < minLength || !text) {
         return text;
@@ -120,6 +169,13 @@ export function highlightText(text: string, search: string, minLength = 3): stri
 
 // --- Chart data generation ---
 
+/**
+ * Builds synthetic CPU usage points for the last uptime window.
+ *
+ * @param uptimeHours Server uptime in hours.
+ * @param now Current timestamp in milliseconds.
+ * @returns Time-series points `[timestamp, cpuUsage]`.
+ */
 export function generateCpuDataPoints(uptimeHours: number, now = Date.now()): [number, number][] {
     const dataPoints: [number, number][] = [];
     const hoursToShow = Math.min(24, Math.max(1, Math.floor(uptimeHours)));
