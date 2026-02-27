@@ -1,22 +1,22 @@
 # DCIM Portal App
 
-A **Data Center Infrastructure Management** portal built with Angular 21. The application provides a web-based interface for managing data center servers — view, add, edit, delete, restart, and shut down servers across multiple data center locations.
+A **Data Center Infrastructure Management** portal built with Angular 21. The application provides a web-based interface for managing data center servers: view, add, edit, delete, restart, and shut down servers across multiple data center locations.
 
-The app uses in-memory mock data (no backend required) and is intended as a demo/reference application.
+The app uses in-memory mock data (no backend required) and is intended as a demo/reference app.
 
 **Live demo:** [https://zhannam85.github.io/dcim-portal-app](https://zhannam85.github.io/dcim-portal-app)
 
 ## Features
 
 - **Server inventory table** — sortable columns (hostname, IP, status, location, OS, CPU, RAM, storage, uptime) with tri-state sort cycling
-- **Filtering** — filter by status, location, and free-text search (hostname/OS, debounced, min 3 characters) with search term highlighting
-- **Bulk actions** — multi-select with select-all/indeterminate checkbox, bulk restart, and bulk delete with undo via notification
+- **Filtering** — filter by status, location, and free-text search (hostname/OS, debounced, minimum 3 characters) with search-term highlighting
+- **Bulk actions** — multi-select with a select-all/indeterminate checkbox, bulk restart, and bulk delete with undo via notifications
 - **Add server** — CDK dialog with reactive form validation (hostname, IP format, CPU/RAM/storage ranges, location, OS, status)
 - **Server detail view** — info cards (Network, System, Hardware) with inline editing, restart, and shut down actions
 - **CPU usage chart** — Highcharts area chart showing simulated 24-hour CPU usage on the detail page
 - **Internationalization** — 5 languages (English, Russian, German, French, Dutch) with runtime switching and localStorage persistence
 - **Notifications** — toast notifications for all user actions (success/warning with undo support) via the ui-kit `NotificationService`
-- **Responsive** — media queries for dialog and form layouts at 768px
+- **Responsive** — media queries for dialog and form layouts at 768 px
 
 ## Tech Stack
 
@@ -99,7 +99,7 @@ src/
 
 ## Internationalization
 
-The app supports 5 languages via `@ngx-translate`:
+The app supports five languages via `@ngx-translate`:
 
 - English (`en`) — default
 - Russian (`ru`)
@@ -138,7 +138,7 @@ This script will:
 
 ## Testing
 
-Tests are written with Jest and cover all components, services, pipes, and utility functions.
+Tests are written with Jest and cover components, services, pipes, and utility functions.
 
 ```bash
 npm test                # Run all tests
@@ -168,7 +168,7 @@ The app ships with 12 mock servers spanning web, database, cache, storage, monit
 
 ## Deployment
 
-The project includes a GitHub Actions workflow (`.github/workflows/deploy-pages.yml`) that deploys to GitHub Pages on push to `master`. The workflow builds with `--base-href /dcim-portal-app/` and copies `index.html` to `404.html` for SPA routing support.
+The project includes a GitHub Actions workflow (`.github/workflows/deploy-pages.yml`) that deploys to GitHub Pages on pushes to `master`. The workflow builds with `--base-href /dcim-portal-app/` and copies `index.html` to `404.html` for SPA routing support.
 
 ## License
 
